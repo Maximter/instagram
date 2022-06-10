@@ -16,16 +16,16 @@ import { VerificationModule } from './verification/verification.module';
     TypeOrmModule.forFeature([User, Token,]),
     MailerModule.forRoot({
       transport: {
-        host: 'smtp.yandex.com',
+        host: process.env.YANDEX_HOST,
         port: 465,
         secure: true,
         auth: {
-          user: 'm-a-x-o-k@yandex.ru',
-          pass: 'Vfrcbv7895123)))03',
+          user: process.env.YANDEX_EMAIL,
+          pass: process.env.YANDEX_PASSWORD,
         },
       },
       defaults: {
-        from: 'Instyle <m-a-x-o-k@yandex.ru>',
+        from: `Instyle <${process.env.YANDEX_EMAIL}>`,
       },
     }),
     LoginModule,
