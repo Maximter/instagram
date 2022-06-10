@@ -15,7 +15,6 @@ export class LoginController {
     res.clearCookie('instyle_token');
     return res.render('login');
     console.log('1');
-    
   }
 
   @Post()

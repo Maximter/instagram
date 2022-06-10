@@ -8,13 +8,7 @@ export class AppController {
 
   @Get()
   async RenderPageWithUser(@Req() req: Request, @Res() res: Response) {
-    const user = await this.appService.getUser(req);    
-    return res.render('index', {user : user});
+    const user = await this.appService.getUser(req);
+    return res.render('index', { user: user });
   }
-
-  // @Get('/:username')
-  // async renderUserPage(@Req() req: Request, @Res() res: Response) {
-  //   const user = await this.appService.getUser(req);    
-  //   return res.render('profile', {user : user});
-  // }
 }

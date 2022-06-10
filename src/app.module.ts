@@ -9,11 +9,12 @@ import { LoggerMiddleware } from './middleware/logger.middleware';
 import { SignupModule } from './signup/signup.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { VerificationModule } from './verification/verification.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(),
-    TypeOrmModule.forFeature([User, Token,]),
+    TypeOrmModule.forFeature([User, Token]),
     MailerModule.forRoot({
       transport: {
         host: process.env.YANDEX_HOST,
@@ -31,9 +32,10 @@ import { VerificationModule } from './verification/verification.module';
     LoginModule,
     SignupModule,
     VerificationModule,
+    UserModule,
   ],
   controllers: [AppController],
-  providers: [AppService,],
+  providers: [AppService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
