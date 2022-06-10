@@ -1,0 +1,73 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Войти • Instyle</title>
+    <link rel="stylesheet" type="text/css" href="./css/login.css"/>
+    <link rel="shortcut icon" type="image/x-icon" href="./img/system/title-logo.png" />
+  </head>
+  <body>
+    <canvas class="background"></canvas>
+
+    <section>
+      <div class="circle"></div>
+      <p class="logo-name">Instyle</p>
+      <form action="/login" method="post">
+        <input type="text" name="username" placeholder="Имя пользователя или эл. адрес" id="username" required>
+        <input type="password" name="password" placeholder="Пароль" id="password" required>
+        <button>Войти</button>
+      </form>
+      <p class="havent-account">Нет аккаунта? <a href="/signup">Зарегистрироваться</a></p>
+    </section>
+
+
+
+  <script src = "https://cdnjs.cloudflare.com/ajax/libs/particlesjs/2.2.3/particles.min.js"></script>
+  <script>
+    window.onload = function() {
+      const circle = document.querySelector('.circle');
+      const colors = ['#F9D423', '#FF4E50', '#BB377D', '#8CA6DB', '#00d2ff', '#FC354C', '#480048', '#FF8008', '#1FA2FF']
+      let random_color = Math.floor(Math.random() * ((colors.length-1) + 1))
+
+      circle.style.border = `3px solid ${colors[random_color]}`;
+      Particles.init({
+          selector: '.background',
+          color: colors[random_color],
+          connectParticles: 'true',
+          maxParticles: 100,
+          speed: 0.4,
+      });
+    };
+  </script>
+
+    {{#if err}}
+    <script src="./js/sweetalert2.all.min.js"></script>
+    <script>
+      document.getElementById('username').value = '{{user.username}}';
+      document.getElementById('password').value = '{{user.password}}';
+
+      Swal.fire({
+        title: 'Ошибка!',
+        text: '{{err}}',
+        icon: 'error',
+        confirmButtonText: 'Повторить попытку'
+      })
+    </script>
+{{/if}}
+
+{{#if warn}}
+    <script src="./js/sweetalert2.all.min.js"></script>
+    <script>
+      document.getElementById('username').value = '{{user.username}}';
+
+      Swal.fire({
+        title: 'Внимание!',
+        text: '{{warn}}',
+        icon: 'warning',
+        confirmButtonText: 'Продолжить'
+      })
+    </script>
+{{/if}}
+  </body>
+</html>
