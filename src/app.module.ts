@@ -10,11 +10,13 @@ import { SignupModule } from './signup/signup.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { VerificationModule } from './verification/verification.module';
 import { UserModule } from './user/user.module';
+import { PostModule } from './post/post.module';
+import { User_post } from 'entity/user_post.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(),
-    TypeOrmModule.forFeature([User, Token]),
+    TypeOrmModule.forFeature([User, Token, User_post]),
     MailerModule.forRoot({
       transport: {
         host: process.env.YANDEX_HOST,
@@ -33,6 +35,7 @@ import { UserModule } from './user/user.module';
     SignupModule,
     VerificationModule,
     UserModule,
+    PostModule,
   ],
   controllers: [AppController],
   providers: [AppService],

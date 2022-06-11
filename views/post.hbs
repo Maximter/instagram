@@ -9,7 +9,7 @@
   <body>
     <header>
       <section>
-        <p class="logo-name">Instyle</p>
+        <a href="/"><p class="logo-name">Instyle</p></a>
         <div class="header-icons">
           <a href="/"><img src="./img/system/home-empty.svg" alt="Главная страница" title="Главная страница"></a>
           <a href="/chat"><img src="./img/system/chat-empty.svg" alt="Мессенджер" title="Мессенджер"></a>
@@ -20,12 +20,70 @@
         </div>
       </section>
     </header>
-
-
-    <section class="main-section" id="main-section">
+    <form action="/post" method="post" enctype="multipart/form-data" class="main-section">
       <div class="photo-section">
+        <div style="display: none;" id="uploaded_image_block" class="uploaded-image-block">
+           <img src="#" class="uploaded-image" id="uploaded_image" >
+        </div>
+       
 
+        <div class="photo-section-about">
+          <img src="./img/system/paste-photo.svg" alt="Прикрепите фотографию" title="Прикрепите фотографию">
+          <p class="paste-photo-text">Выберете фотографию с устройства</p>
+          <input type="file" class="input__file" name="photo" id="input_file" accept=".jpeg,.jpg">
+          <label for="input_file" class="input__file-button">
+              <span class="input__file-button-text">Выбрать фотографию</span>
+          </label>
+        </div>
       </div>
-    </section>
+
+      <div class="post-info">
+        <div class="post-info-user">
+          <a href="/user/{{user.username}}"><img src="./img/avatar/{{#if user.avatar}}{{user.id}}{{else}}standard{{/if}}.jpg" alt="{{user.name_lastname}}" title="{{user.name_lastname}}" class="user-avatar-info"></a>
+          <p class="user-info-name_lastname">{{user.name_lastname}}</p>
+        </div>
+
+        
+          <textarea type="text" class="post-info-textbox" placeholder="Напишите описание к фотографии..." id="comment" name="comment"></textarea> <br>
+          <div class="buttons-block">
+             <button class="save-post">Сохранить</button>
+             <div class="delete-post" id="delete">Удалить</div>
+          </div>
+      </div>
+    </form>
+    <script src="./js/upload-image.js"></script>
+    <script src="./js/post-img-buttons.js"></script>
+    {{#if err}}
+      <script src="./js/sweetalert2.all.min.js"></script>
+      <script>
+        document.getElementById('comment').value = '{{comment}}';
+        uploaded_image_block.style.display = "none"
+        uploaded_image.src = "#"
+
+        Swal.fire({
+          title: 'Ошибка',
+          text: '{{err}}',
+          icon: 'error',
+          confirmButtonText: 'Повторить попытку'
+        })
+      </script>
+    {{/if}}
+
+    {{#if success}}
+      <script src="./js/sweetalert2.all.min.js"></script>
+      <script>
+        uploaded_image_block.style.display = "none"
+        uploaded_image.src = "#"
+
+        Swal.fire({
+          title: 'Готово',
+          text: '{{success}}',
+          icon: 'success',
+          confirmButtonText: 'Хорошо'
+        }).then((result) => {
+        if (result.isConfirmed) window.location.href = '/'
+      })
+      </script>
+    {{/if}}
   </body>
 </html>
