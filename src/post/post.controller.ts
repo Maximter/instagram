@@ -12,6 +12,7 @@ export class PostController {
   @Get()
   async renderMainPage(@Req() req: Request, @Res() res: Response) {
     const user = await this.appService.getUser(req);
+    if (!user) return;
     return res.render('post', { user: user });
   }
 
@@ -19,6 +20,7 @@ export class PostController {
   @UseInterceptors(FileInterceptor('photo', { dest: 'public/img/rowImg' }))
   async downloadPic(@Req() req: Request, @Res() res: Response, @UploadedFile() file: Express.Multer.File,) {
     const user = await this.appService.getUser(req);
+    if (!user) return;
     const validData = await this.postService.checkValidData(file, req.body.comment);
     if (!validData['valid']) return res.render('post', { user: user, comment : req.body.comment, err : validData['err'] });
     

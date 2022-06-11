@@ -28,13 +28,13 @@
       <div class="info-block">
         <div class="username-block"> 
           <p class="user-username">{{user.username}}</p>
-          <button class="settings-button">Настройки</button>
+          <button class="settings-button" onclick="window.location='/settings'">Настройки</button>
         </div>
        
        <div class="numbers-block">
-        <p>публикаций: {{user.countPost}}</p>
-        <p>подписчиков: {{user.countFollowers}}</p>
-        <p>подписок: {{user.countFollowings}}</p>
+        <p>публикаций : {{user.countPost}}</p>
+        <p>подписчиков : {{user.countFollowers}}</p>
+        <p>подписок : {{user.countFollowings}}</p>
        </div>
 
        <div class="bio-block">
@@ -46,6 +46,12 @@
     </section>
 
     <section class="main-section" id="main-section">
+      <ul>
+         {{#each post}}
+          <li><a href="/post/{{this.id_img}}"><img src="/img/postedPic/{{this.id_img}}.jpg" class="post-pic" title="{{this.comment}}"></a></li>
+         {{/each}}
+      </ul>
+     
     </section>
   </body>
 </html>

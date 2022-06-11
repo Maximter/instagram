@@ -18,6 +18,9 @@ export class UserController {
   @Get('/:username')
   async renderUserPage(@Req() req: Request, @Res() res: Response) {
     const user = await this.appService.getUser(req);
-    return res.render('profile', { user: user });
+    const posts = await this.userService.getPosts(user);
+    user['countPost'] = posts.length;
+    
+    return res.render('profile', { user: user, post : posts });
   }
 }

@@ -12,6 +12,7 @@ import { VerificationModule } from './verification/verification.module';
 import { UserModule } from './user/user.module';
 import { PostModule } from './post/post.module';
 import { User_post } from 'entity/user_post.entity';
+import { UserController } from './user/user.controller';
 
 @Module({
   imports: [
@@ -42,6 +43,6 @@ import { User_post } from 'entity/user_post.entity';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LoggerMiddleware).forRoutes(AppController);
+    consumer.apply(LoggerMiddleware).forRoutes(AppController, UserController);
   }
 }
