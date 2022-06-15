@@ -47,6 +47,8 @@ import { Follow } from 'entity/follower.entity';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LoggerMiddleware).forRoutes(AppController, UserController, PostController);
+    consumer
+      .apply(LoggerMiddleware)
+      .forRoutes(AppController, UserController, PostController);
   }
 }

@@ -7,32 +7,30 @@ import { getConnection, Repository } from 'typeorm';
 
 @Injectable()
 export class UserService {
-    constructor(
-        @InjectRepository(User_post)
-        private user_postRepository: Repository<User_post>,
+  constructor(
+    @InjectRepository(User_post)
+    private user_postRepository: Repository<User_post>,
 
-        @InjectRepository(User)
-        private userRepository: Repository<User>,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
 
-        @InjectRepository(Follow)
-        private followRepository: Repository<Follow>,
-      ) {}
+    @InjectRepository(Follow)
+    private followRepository: Repository<Follow>,
+  ) {}
 
+  async getPosts(user: User): Promise<User_post[]> {
+    const posts = await getConnection()
+      .getRepository(User_post)
+      .createQueryBuilder('user_post')
+      .leftJoinAndSelect('user_post.user', 'user')
+      .where('user_post.user = :user', { user: user.id })
+      .orderBy('date_post')
+      .getMany();
 
-    async getPosts(user : User): Promise<User_post[]> {      
-        const posts = await getConnection()
-            .getRepository(User_post)
-            .createQueryBuilder('user_post')
-            .leftJoinAndSelect('user_post.user', 'user')
-            .where('user_post.user = :user', { user: user.id })
-            .orderBy('date_post')
-            .getMany();
+    posts.reverse();
+    return posts;
+  }
 
-        posts.reverse()
-        return posts;
-    }
-
-    
   async getOwner(username): Promise<User> {
     const owner = await this.userRepository.findOne({
       where: { username: username },
@@ -43,7 +41,7 @@ export class UserService {
 
   async isFollow(user, owner): Promise<boolean> {
     const exist = await this.followRepository.findOne({
-        where: { follower: user, following: owner },
+      where: { follower: user, following: owner },
     });
 
     if (exist != undefined) return true;
@@ -52,13 +50,13 @@ export class UserService {
 
   async getfollows(user): Promise<object> {
     const follower = await this.followRepository.find({
-      where: { following: user},
+      where: { following: user },
     });
 
     const following = await this.followRepository.find({
-      where: { follower: user},
+      where: { follower: user },
     });
-    
-    return { follower: follower.length, following: following.length }
+
+    return { follower: follower.length, following: following.length };
   }
 }

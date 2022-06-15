@@ -26,10 +26,10 @@ export class UserController {
     }
     const follows = await this.userService.getfollows(owner);
     const posts = await this.userService.getPosts(owner);
-    owner['countPost'] = posts.length;    
-    owner['countFollowers'] = follows['follower'];    
-    owner['countFollowings'] = follows['following'];    
-    
-    return res.render('profile', { user: user, post : posts, owner : owner });
+    owner['countPost'] = posts.length;
+    owner['countFollowers'] = follows['follower'];
+    owner['countFollowings'] = follows['following'];
+
+    return res.render('profile', { user: user, post: posts, owner: owner });
   }
 }

@@ -10,6 +10,6 @@ import { Follow } from 'entity/follower.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([User, Token, Follow])],
   controllers: [FollowController],
-  providers: [FollowService, AppService]
+  providers: [FollowService, AppService],
 })
 export class FollowModule {}

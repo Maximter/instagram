@@ -22,8 +22,8 @@ export class AppService {
       .leftJoinAndSelect('token.user', 'user')
       .where('token.token = :token', { token: req.cookies['instyle_token'] })
       .getOne();
-      
+
     if (token) return token.user;
-    else return undefined
+    else return undefined;
   }
 }
