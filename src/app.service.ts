@@ -43,8 +43,8 @@ export class AppService {
       .where('follow.follower = :follower', { follower: user.id })
       .getMany();
 
-    followings.forEach(element => {
-      id.push(element.following.id)
+    followings.forEach((element) => {
+      id.push(element.following.id);
     });
 
     let followingPosts = [];
@@ -55,10 +55,11 @@ export class AppService {
         .leftJoinAndSelect('user_post.user', 'user')
         .where('user_post.user IN (:...id)', { id: id })
         .orderBy('user_post.date_post')
-        .take(10)
         .getMany();
-        followingPosts.reverse();
+      followingPosts.reverse();
+      followingPosts.length = 10;
     }
+
     return followingPosts;
   }
 }
