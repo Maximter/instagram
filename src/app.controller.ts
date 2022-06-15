@@ -9,6 +9,10 @@ export class AppController {
   @Get()
   async RenderPageWithUser(@Req() req: Request, @Res() res: Response) {
     const user = await this.appService.getUser(req);
-    return res.render('index', { user: user });
+    const posts = await this.appService.getPosts(user);
+    if (posts.length != 0) return res.render('index', { user: user, posts : posts });
+    else return res.render('index', { user: user, posts : [] });
+
+    
   }
 }
