@@ -16,30 +16,41 @@
           <a href="/post"><img src="./../img/system/add-empty.svg" alt="Добавить фотографию" title="Добавить фотографию"></a>
           <a href="/find"><img src="./../img/system/compass-empty.svg" alt="Найти людей" title="Найти людей"></a>
           <a href="/notification"><img src="./../img/system/notification-empty.svg" alt="Уведомления" title="Уведомления"></a>
-          <a href="/iser/{{user.username}}"><img src="./../img/avatar/{{#if user.avatar}}{{user.id}}{{else}}standard{{/if}}.jpg" alt="{{user.name_lastname}}" title="{{user.name_lastname}}" class="user-avatar"></a>
+          <a href="/user/{{user.username}}"><img src="./../img/avatar/{{#if user.avatar}}{{user.id}}{{else}}standard{{/if}}.jpg" alt="{{user.name_lastname}}" title="{{user.name_lastname}}" class="user-avatar"></a>
         </div>
       </section>
     </header>
 
     <section class="profile-section">
       <div class="avatar-main-block">
-        <img src="./../img/avatar/{{#if user.avatar}}{{user.id}}{{else}}standard{{/if}}.jpg" alt="{{user.name_lastname}}" title="{{user.name_lastname}}" class="user-avatar-main">
+        <img src="./../img/avatar/{{#if owner.avatar}}{{owner.id}}{{else}}standard{{/if}}.jpg" alt="{{owner.name_lastname}}" title="{{owner.name_lastname}}" class="user-avatar-main">
       </div>
       <div class="info-block">
         <div class="username-block"> 
-          <p class="user-username">{{user.username}}</p>
-          <button class="settings-button" onclick="window.location='/settings'">Настройки</button>
+          <p class="user-username">{{owner.username}}</p>
+          {{#if user.owner}}
+            <button class="settings-button" onclick="window.location='/settings'">Настройки</button>
+          {{else}}
+          <form action="/follow/{{owner.username}}" method="post">
+            {{#if user.follow}}
+            <button class="unfollow-button">Отписаться</button>
+            {{else}}
+            <button class="follow-button">Подписаться</button>
+            {{/if}}
+          </form>
+          {{/if}}
+         
         </div>
        
        <div class="numbers-block">
-        <p>публикаций : {{user.countPost}}</p>
-        <p>подписчиков : {{user.countFollowers}}</p>
-        <p>подписок : {{user.countFollowings}}</p>
+        <p>публикаций : {{owner.countPost}}</p>
+        <p>подписчиков : {{owner.countFollowers}}</p>
+        <p>подписок : {{owner.countFollowings}}</p>
        </div>
-
        <div class="bio-block">
-        <p>{{user.name_lastname}}</p>
-        <p>{{user.bio}}</p>
+        <p>{{owner.name_lastname}}</p>
+        <p>{{owner.bio}}</p>
+        
        </div>
       </div>
       

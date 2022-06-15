@@ -10,10 +10,19 @@ export class PostController {
     private readonly appService: AppService,) {}
 
   @Get()
-  async renderMainPage(@Req() req: Request, @Res() res: Response) {
+  async renderPostPage(@Req() req: Request, @Res() res: Response) {
     const user = await this.appService.getUser(req);
     if (!user) return;
     return res.render('post', { user: user });
+  }
+
+  @Get('/:id')
+  async renderPost(@Req() req: Request, @Res() res: Response) {
+    const user = await this.appService.getUser(req);
+    const postInfo = await this.postService.getPostInfo(req.params.id);
+
+    if (user) return res.render('postImg', { user: user, post : postInfo });
+    else return res.render('postImg', { post : postInfo });
   }
 
   @Post()
@@ -27,4 +36,5 @@ export class PostController {
     this.postService.savePicture(file, req.body.comment, user);
     return res.render('post', { user: user, success : 'Фотография будет загружена через несколько секунд' });
   }
+
 }

@@ -12,6 +12,11 @@ export class LoggerMiddleware implements NestMiddleware {
   ) {}
 
   async use(req: Request, res: Response, next: NextFunction) {
+    if (req.route.path == '/post/:id') {
+      next();
+      return 0;
+    }
+
     const tokenClient = req.cookies['instyle_token'];
     const tokenServer = await getConnection()
       .getRepository(Token)

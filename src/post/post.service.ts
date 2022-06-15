@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User_post } from 'entity/user_post.entity';
 import e from 'express';
 import * as fs from 'fs';
-import { Repository } from 'typeorm';
+import { getConnection, Repository } from 'typeorm';
 
 @Injectable()
 export class PostService {
@@ -39,5 +39,16 @@ export class PostService {
             comment: comment
         });
         await this.user_postRepository.save(post);
+    }
+
+    async getPostInfo (id) {
+      const post = await getConnection()
+        .getRepository(User_post)
+        .createQueryBuilder('user_post')
+        .leftJoinAndSelect('user_post.user', 'user')
+        .where('user_post.id_img = :id', { id: id })
+        .getOne();
+
+      return post
     }
 }

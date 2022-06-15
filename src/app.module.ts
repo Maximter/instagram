@@ -13,11 +13,14 @@ import { UserModule } from './user/user.module';
 import { PostModule } from './post/post.module';
 import { User_post } from 'entity/user_post.entity';
 import { UserController } from './user/user.controller';
+import { PostController } from './post/post.controller';
+import { FollowModule } from './follow/follow.module';
+import { Follow } from 'entity/follower.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(),
-    TypeOrmModule.forFeature([User, Token, User_post]),
+    TypeOrmModule.forFeature([User, Token, User_post, Follow]),
     MailerModule.forRoot({
       transport: {
         host: process.env.YANDEX_HOST,
@@ -37,12 +40,13 @@ import { UserController } from './user/user.controller';
     VerificationModule,
     UserModule,
     PostModule,
+    FollowModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LoggerMiddleware).forRoutes(AppController, UserController);
+    consumer.apply(LoggerMiddleware).forRoutes(AppController, UserController, PostController);
   }
 }

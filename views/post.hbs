@@ -81,7 +81,7 @@
           icon: 'success',
           confirmButtonText: 'Хорошо'
         }).then((result) => {
-        if (result.isConfirmed) window.location.href = '/'
+        if (result.isConfirmed) window.location.href = '/user/{{user.username}}'
       })
       </script>
     {{/if}}

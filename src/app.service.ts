@@ -8,6 +8,9 @@ import { User } from 'entity/user.entity';
 @Injectable()
 export class AppService {
   constructor(
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
+
     @InjectRepository(Token)
     private tokenRepository: Repository<Token>,
   ) {}
@@ -19,8 +22,8 @@ export class AppService {
       .leftJoinAndSelect('token.user', 'user')
       .where('token.token = :token', { token: req.cookies['instyle_token'] })
       .getOne();
-    if (token == undefined) throw new UnauthorizedException();
-    if (!token.user.avatar) delete token.user.avatar;
-    return token.user;
+      
+    if (token) return token.user;
+    else return undefined
   }
 }

@@ -14,6 +14,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
     const status = exception.getStatus();
+    if (request.route) if (request.route.path == '/post/:id') return;
 
     if (status == 404) {
       response.render('404');

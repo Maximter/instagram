@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <title>Instyle</title>
+    <link rel="stylesheet" type="text/css" href="../css/post-img.css"/>
+    <link rel="shortcut icon" type="image/x-icon" href="../img/system/title-logo.png" />
+  </head>
+  <body>
+    <header>
+      <section>
+        <a href="/"><p class="logo-name">Instyle</p></a>
+        <div class="header-icons">
+          <a href="/"><img src="../img/system/home-empty.svg" alt="Главная страница" title="Главная страница"></a>
+          <a href="/chat"><img src="../img/system/chat-empty.svg" alt="Мессенджер" title="Мессенджер"></a>
+          <a href="/post"><img src="../img/system/add-empty.svg" alt="Добавить фотографию" title="Добавить фотографию"></a>
+          <a href="/find"><img src="../img/system/compass-empty.svg" alt="Найти людей" title="Найти людей"></a>
+          <a href="/notification"><img src="../img/system/notification-empty.svg" alt="Уведомления" title="Уведомления"></a>
+          <a href="/user/{{user.username}}"><img src="../img/avatar/{{#if user.avatar}}{{user.id}}{{else}}standard{{/if}}.jpg" alt="{{user.name_lastname}}" title="{{user.name_lastname}}" class="user-avatar"></a>
+        </div>
+      </section>
+    </header>
+    
+    
+    <section class="main-section">
+      <div class="photo-section">
+        <a href="/user/{{post.user.username}}" class="owner-block">
+          <img src="../img/avatar/{{#if post.user.avatar}}{{post.user.id}}{{else}}standard{{/if}}.jpg" alt="{{post.user.name_lastname}}" title="{{post.user.name_lastname}}" class="owner-avatar">
+          <p class="owner-username">{{post.user.username}}</p>
+        </a>
+        <img src="../img/postedPic/{{post.id_img}}.jpg" class="img">
+      </div>
+
+       <div class="under-post">
+          <img src="../img/system/notification-empty.svg" title="Нравится">
+          <img src="../img/system/copy.svg" title="Скопировать ссылку" class="copy" id="copy">
+
+          <p class="comment-text"><span style="font-weight: 500;">Отметок нравится: {{post.user.id}}</span></p>
+          <p class="comment-text"><span style="font-weight: 500;">{{post.user.username}}:</span> {{post.comment}}</p>
+          <p class="comment-text show-comments">Показать комментарии: {{post.user.id}}</p>
+        </div>
+    </section>
+
+    <script src="../js/sweetalert2.all.min.js"></script>
+    <script>
+      const copy = document.getElementById('copy')
+
+      copy.onclick = () => {
+        navigator.clipboard.writeText(window.location.href)
+          .then(() => {
+             Swal.fire({
+              position: 'top',
+              icon: 'success',
+              title: 'Ссылка на пост была скопирована',
+              showConfirmButton: false,
+              timer: 1000
+            })
+          })
+          .catch(err => {
+              Swal.fire({
+                position: 'top',
+                icon: 'error',
+                title: 'Упс, что-то пошло не по плану. Сообщите об этом нам',
+                showConfirmButton: false,
+                timer: 2000
+              })
+          });
+      }
+    </script>
+  </body>
+</html>
