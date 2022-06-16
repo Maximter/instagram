@@ -9,7 +9,8 @@ export class AppController {
   @Get()
   async RenderPageWithUser(@Req() req: Request, @Res() res: Response) {
     const user = await this.appService.getUser(req);
-    const posts = await this.appService.getPosts(user);
+    const postsInfo = await this.appService.getPosts(user);
+    const posts = await this.appService.getLikes(user, postsInfo);
     return res.render('index', { user: user, posts: posts });
   }
 }

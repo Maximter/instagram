@@ -16,11 +16,13 @@ import { UserController } from './user/user.controller';
 import { PostController } from './post/post.controller';
 import { FollowModule } from './follow/follow.module';
 import { Follow } from 'entity/follower.entity';
+import { Like } from 'typeorm';
+import { LikePost } from 'entity/like.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(),
-    TypeOrmModule.forFeature([User, Token, User_post, Follow]),
+    TypeOrmModule.forFeature([User, Token, User_post, Follow, LikePost]),
     MailerModule.forRoot({
       transport: {
         host: process.env.YANDEX_HOST,

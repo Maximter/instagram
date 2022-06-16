@@ -30,9 +30,10 @@ export class PostController {
   async renderPost(@Req() req: Request, @Res() res: Response) {
     const user = await this.appService.getUser(req);
     const postInfo = await this.postService.getPostInfo(req.params.id);
+    const post = await this.appService.getLikes(user, [postInfo]);
 
-    if (user) return res.render('postImg', { user: user, post: postInfo });
-    else return res.render('postImg', { post: postInfo });
+    if (user) return res.render('postImg', { user: user, post: post[0] });
+    else return res.render('postImg', { post: post[0] });
   }
 
   @Post()
@@ -60,5 +61,12 @@ export class PostController {
       user: user,
       success: 'Фотография будет загружена через несколько секунд',
     });
+  }
+
+  @Post('/like/:id_post')
+  async likePost(@Req() req: Request, @Res() res: Response) {
+    const user = await this.appService.getUser(req);
+    this.postService.like(user, req.params.id_post);
+    res.end();
   }
 }

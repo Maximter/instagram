@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { LikePost } from 'entity/like.entity';
 import { User_post } from 'entity/user_post.entity';
 import e from 'express';
 import * as fs from 'fs';
@@ -10,6 +11,9 @@ export class PostService {
   constructor(
     @InjectRepository(User_post)
     private user_postRepository: Repository<User_post>,
+
+    @InjectRepository(LikePost)
+    private like_postRepository: Repository<LikePost>,
   ) {}
 
   async checkValidData(photo, comment): Promise<object> {
@@ -53,5 +57,24 @@ export class PostService {
       .getOne();
 
     return post;
+  }
+
+  async like(user, id_post) {
+    const exist = await this.like_postRepository.findOne({
+      where: { user: user.id, post: id_post },
+    });
+
+    if (exist != undefined) this.like_postRepository.remove(exist);
+    else {
+      const post = await this.user_postRepository.findOne({
+        where: { id_img: id_post },
+      });
+
+      const likeSystem: LikePost = this.like_postRepository.create({
+        user: user,
+        post: post,
+      });
+      this.like_postRepository.save(likeSystem);
+    }
   }
 }

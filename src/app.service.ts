@@ -6,6 +6,7 @@ import * as fs from 'fs';
 import { User } from 'entity/user.entity';
 import { Follow } from 'entity/follower.entity';
 import { User_post } from 'entity/user_post.entity';
+import { LikePost } from 'entity/like.entity';
 
 @Injectable()
 export class AppService {
@@ -18,6 +19,9 @@ export class AppService {
 
     @InjectRepository(Follow)
     private followRepository: Repository<Follow>,
+
+    @InjectRepository(LikePost)
+    private like_postRepository: Repository<LikePost>,
   ) {}
 
   async getUser(req): Promise<User> {
@@ -61,5 +65,52 @@ export class AppService {
     }
 
     return followingPosts;
+  }
+
+  async getLikes(user, posts) {
+    if (posts.length == 0) return;
+    const id = [];
+    let userLikes;
+    let postLikes;
+
+    posts.forEach((element) => {
+      id.push(element.id_img);
+    });
+
+    userLikes = await getConnection()
+      .getRepository(LikePost)
+      .createQueryBuilder('likePost')
+      .leftJoinAndSelect('likePost.user', 'user')
+      .leftJoinAndSelect('likePost.post', 'post')
+      .where('likePost.user = :user', { user: user })
+      .where('likePost.post IN (:...id)', { id: id })
+      .getMany();
+
+    userLikes.forEach((el_like) => {
+      for (let i = 0; i < posts.length; i++) {
+        if (
+          el_like.user.id == user.id &&
+          posts[i].id_img == el_like.post.id_img
+        ) {
+          posts[i]['like'] = true;
+          break;
+        }
+      }
+    });
+
+    for (let i = 0; i < posts.length; i++) {
+      postLikes = await getConnection()
+        .getRepository(LikePost)
+        .createQueryBuilder('likePost')
+        .leftJoinAndSelect('likePost.post', 'post')
+        .where('likePost.post = :id', { id: posts[i].id_img })
+        .getMany();
+
+      posts[i]['countLikes'] = postLikes.length;
+    }
+
+    console.log();
+
+    return posts;
   }
 }

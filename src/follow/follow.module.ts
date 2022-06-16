@@ -6,9 +6,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'entity/user.entity';
 import { Token } from 'entity/token.entity';
 import { Follow } from 'entity/follower.entity';
+import { LikePost } from 'entity/like.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Token, Follow])],
+  imports: [TypeOrmModule.forFeature([User, Token, Follow, LikePost])],
   controllers: [FollowController],
   providers: [FollowService, AppService],
 })

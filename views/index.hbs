@@ -35,10 +35,10 @@
                 <img src="/img/postedPic/{{this.id_img}}.jpg" class="post-pic" title="{{this.comment}}">
               </a>
               <div class="under-post">
-                <img src="../img/system/notification-empty.svg" title="Нравится">
+                <img src="../img/system/{{#if this.like}}liked{{else}}notification-empty{{/if}}.svg" title="Нравится" class="like" onclick="like(this, '{{this.id_img}}')">
                 <img src="../img/system/copy.svg" title="Скопировать ссылку" class="copy" id="copy" onclick="copy('/post/{{this.id_img}}')">
 
-                <p class="comment-text"><span style="font-weight: 500;">Отметок нравится: {{this.countLikes}}</span></p>
+                <p class="comment-text"><span style="font-weight: 500;" id="likes_{{this.id_img}}" likes="{{this.countLikes}}" >Отметок нравится: {{this.countLikes}}</span></p>
                 <p class="comment-text"><span style="font-weight: 500;">{{this.user.username}}:</span> {{this.comment}}</p>
               </div>
             </li>
@@ -68,7 +68,26 @@
 
    <script src="../js/sweetalert2.all.min.js"></script>
     <script>
+      function like (el, id_img) {
+        fetch(`post/like/${id_img}`, {
+        method: "post",
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+      });
+      const count = document.getElementById(`likes_${id_img}`);
 
+      if (el.src.indexOf('notification') > -1) {
+        el.src = "../img/system/liked.svg";
+        count.attributes.likes.value = ++count.attributes.likes.value;
+      }
+      else {
+        count.attributes.likes.value = --count.attributes.likes.value;
+        el.src = "../img/system/notification-empty.svg";
+      }
+      count.innerHTML = `Отметок нравится: ${count.attributes.likes.value}`;
+      }
 
       function copy (link) {
         navigator.clipboard.writeText(window.location.host + link)

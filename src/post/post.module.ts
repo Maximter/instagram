@@ -7,9 +7,12 @@ import { User } from 'entity/user.entity';
 import { Token } from 'entity/token.entity';
 import { User_post } from 'entity/user_post.entity';
 import { Follow } from 'entity/follower.entity';
+import { LikePost } from 'entity/like.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Token, User_post, Follow])],
+  imports: [
+    TypeOrmModule.forFeature([User, Token, User_post, Follow, LikePost]),
+  ],
   controllers: [PostController],
   providers: [PostService, AppService],
 })
