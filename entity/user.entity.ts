@@ -22,6 +22,9 @@ export class User {
   @IsNotEmpty()
   password: string;
 
+  @Column({ length: 300 })
+  bio?: string;
+
   @Column({ default: false })
   avatar? : boolean;
 

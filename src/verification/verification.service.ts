@@ -52,4 +52,34 @@ export class VerificationService {
         console.log(err);
       });
   }
+
+  async changeEmail(user, email, req): Promise<void> {
+    const emailTemplateSource = fs.readFileSync(
+      path.join(__dirname, '../../../views/mail/changeEmail.hbs'),
+      'utf8',
+    );
+    const template = handlebars.compile(emailTemplateSource);
+
+    const confirmLink = `http://${req.get(
+      'host',
+    )}/verification/confirm-email?id=${user.id}&pass=${
+      user.password
+    }&email=${email}`;
+    const settingsLink = `http://${req.get('host')}/settings`;
+    const htmlToSend = template({
+      confirmLink: confirmLink,
+      settingsLink: settingsLink,
+    });
+
+    this.mailerService
+      .sendMail({
+        to: user.email,
+        subject: 'Изменение эл. почты Instyle',
+        html: htmlToSend,
+      })
+      .then(() => {})
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 }

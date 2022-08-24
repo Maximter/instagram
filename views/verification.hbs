@@ -16,16 +16,31 @@
   </style>
   <body>
 
-    <script src="./js/sweetalert2.all.min.js"></script>
-    <script>
-      Swal.fire({
-        title: 'Подтверждение',
-        text: 'Эл. адрес успешно подтвержден',
-        icon: 'success',
-        confirmButtonText: 'Продолжить'
-      }).then((result) => {
-        if (result.isConfirmed) window.location.href = '/login'
-      })
-    </script>
+    <script src="../js/sweetalert2.all.min.js"></script>
+    {{#if signup}}
+      <script>
+        Swal.fire({
+          title: 'Подтверждение',
+          text: 'Эл. адрес успешно подтвержден',
+          icon: 'success',
+          confirmButtonText: 'Продолжить'
+        }).then((result) => {
+          if (result.isConfirmed) window.location.href = '/login'
+        })
+      </script>
+    {{/if}}
+
+    {{#if confirmEmail}}
+      <script>
+        Swal.fire({
+          title: 'Подтверждение',
+          text: 'Эл. адрес был изменен',
+          icon: 'success',
+          confirmButtonText: 'Продолжить'
+        }).then((result) => {
+          if (result.isConfirmed) window.location.href = '/'
+        })
+      </script>
+    {{/if}}
   </body>
 </html>
