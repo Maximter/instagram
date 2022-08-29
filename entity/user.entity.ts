@@ -29,8 +29,5 @@ export class User {
   avatar? : boolean;
 
   @Column({ default: false })
-  private? : boolean;
-
-  @Column({ default: false })
   verificated? : boolean;
 }

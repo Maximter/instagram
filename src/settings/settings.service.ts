@@ -3,6 +3,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'entity/user.entity';
 import { VerificationService } from 'src/verification/verification.service';
 import { Repository } from 'typeorm';
+import * as bcrypt from 'bcrypt';
+import * as fs from 'fs';
+
+const saltForHash = 7;
 
 @Injectable()
 export class SettingsService {
@@ -106,5 +110,52 @@ export class SettingsService {
     });
     if (user) return true;
     else return false;
+  }
+
+  async valid_pass(user, req): Promise<object> {
+    const oldPass = req.body['old-pass'],
+      newPass = req.body['new-pass'],
+      newPass2 = req.body['new-pass2'];
+
+    if (newPass.length < 8)
+      return {
+        valid: false,
+        err: 'Введен слишком короткий пароль',
+      };
+    if (newPass.length > 65)
+      return { valid: false, err: 'Введен слишком длинный пароль' };
+    
+
+    if (newPass != newPass2) {
+      return {
+        valid: false,
+        err: 'Введённые новые пароли не совпадают',
+      }
+    }
+    if (await bcrypt.compare(oldPass, user.password)) {
+      const hashPassword: string = await bcrypt.hash(newPass, saltForHash);
+      user.password = hashPassword;
+
+      await this.userRepository.save(user);
+      return { valid: true }
+    } else {
+      return {
+        valid: false,
+        err: 'Неверно введён текущий пароль',
+      }
+    }
+  }
+
+  async change_avatar(user, file): Promise<void> {
+    user.avatar = true;
+    this.userRepository.save(user);
+
+    fs.rename(
+      `./public/img/rowImg/${file.filename}`,
+      `./public/img/avatar/${user.id}.jpg`,
+      function (err) {
+        if (err) console.log('ERROR: ' + err);
+      },
+    );
   }
 }

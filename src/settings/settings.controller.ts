@@ -1,7 +1,9 @@
-import { Controller, Get, Post, Req, Res } from '@nestjs/common';
-import { Request, Response } from 'express';
+import { Controller, Get, Post, Req, Res, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { Request, Response, Express } from 'express';
 import { AppService } from 'src/app.service';
 import { SettingsService } from './settings.service';
+
 
 @Controller('settings')
 export class SettingsController {
@@ -16,7 +18,7 @@ export class SettingsController {
     return res.render('settings', { user: user });
   }
 
-  @Post('change-profile')
+  @Post('edit-profile')
   async change_profile(@Req() req: Request, @Res() res: Response) {
     const user = await this.appService.getUser(req);
     if (!user) return;
@@ -34,5 +36,39 @@ export class SettingsController {
         success: 'Введённые данные были сохранены',
         warn: valid_data['warn'],
       });
+  }
+
+  @Post('change-password')
+  async change_password(@Req() req: Request, @Res() res: Response) {
+    const user = await this.appService.getUser(req);
+    if (!user) return;
+
+    const valid_pass = await this.settingsService.valid_pass(user, req);
+    if (!valid_pass['valid'])
+      return res.render('settings', {
+        err: valid_pass['err'],
+        user: user,
+      });
+    else
+      return res.render('settings', {
+        user: user,
+        success: 'Пароль был изменён',
+        toLogin : true
+      });
+  }
+
+  @Post('change-avatar')
+  @UseInterceptors(FileInterceptor('avatar', { dest: 'public/img/rowImg' }))
+  async changeAvatar(
+    @Req() req,
+    @Res() res: Response,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    const user = await this.appService.getUser(req);
+    if (!file) return;
+
+    this.settingsService.change_avatar(user, file);
+    res.writeHead(302, { Location: `/user/${user.username}` });
+    res.end();
   }
 }

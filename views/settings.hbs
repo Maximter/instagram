@@ -26,7 +26,27 @@
       <h1>Настройки</h1>
 
       <div class="settings-block">
-        <form action="/settings/change-profile" method="post">
+        <form action="/settings/change-avatar" enctype="multipart/form-data" method="post">
+          
+          <div class="name-section">
+            <h3>Изменить аватар</h3>
+          </div>
+          
+         <img src="../img/avatar/{{#if user.avatar}}{{user.id}}{{else}}standard{{/if}}.jpg" alt="{{user.name_lastname}}" title="{{user.name_lastname}}" class="user-big-avatar" id="settings-avatar">
+          
+          <p class="paste-photo-text">Выберете фотографию с устройства</p>
+          <input type="file" class="input__file" name="avatar" id="input_file" accept=".jpeg,.jpg">
+          <label for="input_file" class="input__file-button">
+              <span class="input__file-button-text">Выбрать фотографию</span>
+          </label>
+
+          <div class="block-change">
+
+          <button>Изменить</button>
+        </form>
+
+
+        <form action="/settings/edit-profile" method="post">
           
           <div class="name-section">
             <img src="../img/system/edit.svg" alt="Профиль" title="Профиль" class="name-section-img">
@@ -57,9 +77,7 @@
         </form>
 
 
-
-
-        <form action="change-password" method="post">
+        <form action="/settings/change-password" method="post">
           
           <div class="name-section">
             <img src="../img/system/lock.svg" alt="Профиль" title="Профиль" class="name-section-img">
@@ -68,17 +86,17 @@
           
           <div class="block-change">
               <h5>Старый пароль</h5>
-              <input type="password" required>
+              <input type="password" name="old-pass" required>
           </div>
 
           <div class="block-change">
             <h5>Новый пароль</h5>
-              <input type="password" required>
+              <input type="password" name="new-pass" required>
           </div>
 
           <div class="block-change">
             <h5>Подтвердите новый пароль</h5>
-              <input type="password" required>
+              <input type="password" name="new-pass2" required>
           </div>
 
           <button class="last-element">Изменить</button>
@@ -88,6 +106,15 @@
     </section>
 
   <script src="../js/sweetalert2.all.min.js"></script>
+  <script>
+    const input_image = document.getElementById('input_file');
+  const settings_avatar = document.getElementById('settings-avatar');
+
+  input_image.onchange = () => {
+    const [file] = input_image.files
+    if (file) settings_avatar.src = URL.createObjectURL(file)
+  }
+  </script>
 
   {{#if err}}
     <script>
@@ -115,6 +142,12 @@
             icon: 'warning',
             confirmButtonText: 'Продолжить'
           })
+        }
+      })
+      {{/if}}
+      {{#if toLogin}}.then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = '/login';
         }
       })
       {{/if}}
