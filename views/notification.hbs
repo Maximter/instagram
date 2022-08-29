@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <title>Instyle</title>
+    <link rel="stylesheet" type="text/css" href="../css/notification.css"/>
+    <link rel="shortcut icon" type="image/x-icon" href="../img/system/title-logo.png" />
+  </head>
+  <body>
+    <header>
+      <section>
+        <a href="/"><p class="logo-name">Instyle</p></a>
+        <div class="header-icons">
+          <a href="/"><img src="../img/system/home-empty.svg" alt="Главная страница" title="Главная страница"></a>
+          <a href="/chat"><img src="../img/system/chat-empty.svg" alt="Мессенджер" title="Мессенджер"></a>
+          <a href="/post"><img src="../img/system/add-empty.svg" alt="Добавить фотографию" title="Добавить фотографию"></a>
+          <a href="/find"><img src="../img/system/compass-empty.svg" alt="Найти людей" title="Найти людей"></a>
+          <a href="/notification"><img src="../img/system/notification-fill.svg" alt="Уведомления" title="Уведомления"></a>
+          <a href="/user/{{user.username}}"><img src="../img/avatar/{{#if user.avatar}}{{user.id}}{{else}}standard{{/if}}.jpg" alt="{{user.name_lastname}}" title="{{user.name_lastname}}" class="user-avatar"></a>
+        </div>
+      </section>
+    </header>
+    
+    <section class="main-section">
+      <h1>Уведомления</h1>
+
+      <ul class="settings-block">  
+        {{#if notification}}
+        {{#each notification}}
+          <li>
+            {{#if this.follower}}
+              <a href="/user/{{this.follower.username}}"><img src="../img/avatar/{{#if this.follower.avatar}}{{this.follower.id}}{{else}}standard{{/if}}.jpg" alt="{{this.follower.name_lastname}}" title="{{this.follower.name_lastname}}" class="notif-avatar"></a>
+              <p><a href="/user/{{this.follower.username}}"><span>{{this.follower.username}}</span></a> подписался(ась) на Вас</p>
+              {{else}}
+              <a href="/user/{{this.user.username}}"><img src="../img/avatar/{{#if this.user.avatar}}{{this.user.id}}{{else}}standard{{/if}}.jpg" alt="{{this.user.name_lastname}}" title="{{this.user.name_lastname}}" class="notif-avatar"></a>
+              <p><a href="/user/{{this.user.username}}"><span>{{this.user.username}}</span></a> понравилась Ваша фотография:</p>
+              <a href="/post/{{this.post.id_img}}"><img src="/img/postedPic/{{this.post.id_img}}.jpg" class="notif-post" title="{{this.post.comment}}"></a>
+            {{/if}}
+          </li>  
+        {{/each}}
+        {{else}}
+        <li><p>У Вас пока что нет уведомлений</p></li>  
+        {{/if}} 
+      </ul>
+
+    </section>
+  </body>
+</html>
