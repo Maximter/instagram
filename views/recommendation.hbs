@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <title>Instyle</title>
+    <link rel="stylesheet" type="text/css" href="./../css/recommendation.css"/>
+    <link rel="shortcut icon" type="image/x-icon" href="./../img/system/title-logo.png" />
+  </head>
+  <body>
+    <header>
+      <section>
+        <a href="/"><p class="logo-name">Instyle</p></a>
+        <div class="header-icons">
+          <a href="/"><img src="./../img/system/home-empty.svg" alt="Главная страница" title="Главная страница"></a>
+          <a href="/chat"><img src="./../img/system/chat-empty.svg" alt="Мессенджер" title="Мессенджер"></a>
+          <a href="/post"><img src="./../img/system/add-empty.svg" alt="Добавить фотографию" title="Добавить фотографию"></a>
+          <a href="/recommendation"><img src="./../img/system/compass-fill.svg" alt="Рекомендуемое" title="Рекомендуемое"></a>
+          <a href="/notification"><img src="./../img/system/notification-empty.svg" alt="Уведомления" title="Уведомления"></a>
+          <a href="/user/{{user.username}}"><img src="./../img/avatar/{{#if user.avatar}}{{user.id}}{{else}}standard{{/if}}.jpg" alt="{{user.name_lastname}}" title="{{user.name_lastname}}" class="user-avatar" {{#if user.owner}}{{else}}style="border: none;"{{/if}}></a>
+        </div>
+      </section>
+    </header>
+
+    <section class="find-section">
+      <h2>Поиск</h2>
+      <input type="text" placeholder="Введите никнейм пользователя" class="input-find">
+        {{!-- <a href="/user/{{this.user.username}}" class="div-found-user">
+          <img src="../img/avatar/{{#if this.user.avatar}}{{this.user.id}}{{else}}standard{{/if}}.jpg" alt="{{this.user.name_lastname}}" title="{{this.user.name_lastname}}" class="found-avatar">
+          <p class="found-user-username">{{this.user.username}}</p>
+        </a> --}}
+    </section>
+
+    <section class="main-section" id="main-section">
+      <h2 class="name-popular">Популярное</h2>
+      <ul>
+         {{#each post}}
+          <li><a href="/post/{{this.[0]}}"><img src="/img/postedPic/{{this.[0]}}.jpg" class="post-pic"></a></li>
+         {{/each}}
+      </ul>
+    </section>
+  </body>
+</html>

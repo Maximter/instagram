@@ -20,6 +20,7 @@ import { Like } from 'typeorm';
 import { LikePost } from 'entity/like.entity';
 import { SettingsModule } from './settings/settings.module';
 import { NotificationModule } from './notification/notification.module';
+import { RecommendationModule } from './recommendation/recommendation.module';
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import { NotificationModule } from './notification/notification.module';
     FollowModule,
     SettingsModule,
     NotificationModule,
+    RecommendationModule,
   ],
   controllers: [AppController],
   providers: [AppService],

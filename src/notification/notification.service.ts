@@ -37,9 +37,9 @@ export class NotificationService {
             .leftJoinAndSelect('like_post.post', 'post')
             .leftJoinAndSelect('like_post.user', 'user')
             .where('like_post.post IN (:...id)', { id: id_img })
+            .orderBy('like_post.id', 'DESC')
             .take(9)
             .getMany();
-        likes = likes.reverse();
 
         let follow = await getConnection()
             .getRepository(Follow)
@@ -47,8 +47,9 @@ export class NotificationService {
             .leftJoinAndSelect('follow.follower', 'follower')
             .leftJoinAndSelect('follow.following', 'following')
             .where('follow.following = :id', { id: user.id })
+            .orderBy('follow.id', 'DESC')
             .take(1)
-            .getMany();
+            .getMany();        
             
         return [ ...follow, ...likes]
     }
