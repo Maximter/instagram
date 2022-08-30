@@ -1,9 +1,16 @@
-import { Controller, Get, Post, Req, Res, UseInterceptors, UploadedFile } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Req,
+  Res,
+  UseInterceptors,
+  UploadedFile,
+} from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Request, Response, Express } from 'express';
 import { AppService } from 'src/app.service';
 import { SettingsService } from './settings.service';
-
 
 @Controller('settings')
 export class SettingsController {
@@ -53,7 +60,7 @@ export class SettingsController {
       return res.render('settings', {
         user: user,
         success: 'Пароль был изменён',
-        toLogin : true
+        toLogin: true,
       });
   }
 

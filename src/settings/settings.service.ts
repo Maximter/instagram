@@ -124,25 +124,24 @@ export class SettingsService {
       };
     if (newPass.length > 65)
       return { valid: false, err: 'Введен слишком длинный пароль' };
-    
 
     if (newPass != newPass2) {
       return {
         valid: false,
         err: 'Введённые новые пароли не совпадают',
-      }
+      };
     }
     if (await bcrypt.compare(oldPass, user.password)) {
       const hashPassword: string = await bcrypt.hash(newPass, saltForHash);
       user.password = hashPassword;
 
       await this.userRepository.save(user);
-      return { valid: true }
+      return { valid: true };
     } else {
       return {
         valid: false,
         err: 'Неверно введён текущий пароль',
-      }
+      };
     }
   }
 

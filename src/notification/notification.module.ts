@@ -14,6 +14,6 @@ import { LikePost } from 'entity/like.entity';
     TypeOrmModule.forFeature([User, Token, User_post, Follow, LikePost]),
   ],
   controllers: [NotificationController],
-  providers: [NotificationService, AppService]
+  providers: [NotificationService, AppService],
 })
 export class NotificationModule {}

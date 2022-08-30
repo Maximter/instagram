@@ -14,6 +14,6 @@ import { LikePost } from 'entity/like.entity';
     TypeOrmModule.forFeature([User, Token, User_post, Follow, LikePost]),
   ],
   controllers: [RecommendationController],
-  providers: [RecommendationService, AppService]
+  providers: [RecommendationService, AppService],
 })
 export class RecommendationModule {}

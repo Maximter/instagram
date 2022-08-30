@@ -60,6 +60,13 @@ export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(LoggerMiddleware)
-      .forRoutes(AppController, UserController, PostController, SettingsController, RecommendationController, NotificationController);
+      .forRoutes(
+        AppController,
+        UserController,
+        PostController,
+        SettingsController,
+        RecommendationController,
+        NotificationController,
+      );
   }
 }
