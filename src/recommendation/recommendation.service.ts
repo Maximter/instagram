@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { LikePost } from 'entity/like.entity';
+import { User } from 'entity/user.entity';
 import { getConnection, Repository } from 'typeorm';
 
 @Injectable()
@@ -8,6 +9,9 @@ export class RecommendationService {
     constructor(    
         @InjectRepository(LikePost)
         private like_postRepository: Repository<LikePost>,
+
+        @InjectRepository(User)
+        private userRepository: Repository<User>,
       ) {}
 
     async getPopularPosts(): Promise<object[]> {
@@ -39,6 +43,17 @@ export class RecommendationService {
         countLikes.reverse();        
 
         return countLikes;
+    }
+
+    async findUser(username) {
+        const userInfo = await this.userRepository.findOne({
+            where: { username: username },
+        });
+
+        if (userInfo) {
+            const { password, email, bio, verificated, ...user } = userInfo;
+            return user
+        } else return undefined;
     }
 
     

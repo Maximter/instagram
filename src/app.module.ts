@@ -21,6 +21,9 @@ import { LikePost } from 'entity/like.entity';
 import { SettingsModule } from './settings/settings.module';
 import { NotificationModule } from './notification/notification.module';
 import { RecommendationModule } from './recommendation/recommendation.module';
+import { SettingsController } from './settings/settings.controller';
+import { RecommendationController } from './recommendation/recommendation.controller';
+import { NotificationController } from './notification/notification.controller';
 
 @Module({
   imports: [
@@ -57,6 +60,6 @@ export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(LoggerMiddleware)
-      .forRoutes(AppController, UserController, PostController);
+      .forRoutes(AppController, UserController, PostController, SettingsController, RecommendationController, NotificationController);
   }
 }

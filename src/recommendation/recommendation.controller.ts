@@ -17,10 +17,16 @@ export class RecommendationController {
   @Get()
   async renderPostPage(@Req() req: Request, @Res() res: Response) {
     const user = await this.appService.getUser(req);
-    if (!user) return;
-
     const posts = await this.recommendationService.getPopularPosts();
   
     return res.render('recommendation', { user: user, post : posts });
+  }
+
+  @Get('find/:username')
+  async findUser(@Req() req: Request, @Res() res: Response) {
+    
+    const user = await this.recommendationService.findUser(req.params.username);
+    res.json(user);
+    res.end();
   }
 }
