@@ -22,7 +22,7 @@ export class User {
   @IsNotEmpty()
   password: string;
 
-  @Column({ length: 300 })
+  @Column({ length: 300, default: " "})
   bio?: string;
 
   @Column({ default: false })

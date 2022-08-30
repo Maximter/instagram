@@ -22,7 +22,6 @@ export class PostController {
   @Get()
   async renderPostPage(@Req() req: Request, @Res() res: Response) {
     const user = await this.appService.getUser(req);
-    if (!user) return;
     return res.render('post', { user: user });
   }
 
@@ -44,7 +43,6 @@ export class PostController {
     @UploadedFile() file: Express.Multer.File,
   ) {
     const user = await this.appService.getUser(req);
-    if (!user) return;
     const validData = await this.postService.checkValidData(
       file,
       req.body.comment,

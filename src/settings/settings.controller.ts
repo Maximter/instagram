@@ -48,8 +48,6 @@ export class SettingsController {
   @Post('change-password')
   async change_password(@Req() req: Request, @Res() res: Response) {
     const user = await this.appService.getUser(req);
-    if (!user) return;
-
     const valid_pass = await this.settingsService.valid_pass(user, req);
     if (!valid_pass['valid'])
       return res.render('settings', {

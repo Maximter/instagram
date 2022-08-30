@@ -77,6 +77,7 @@ export class AppService {
       id.push(element.id_img);
     });
 
+    if (user) {
     userLikes = await getConnection()
       .getRepository(LikePost)
       .createQueryBuilder('likePost')
@@ -96,7 +97,7 @@ export class AppService {
           break;
         }
       }
-    });
+    });}
 
     for (let i = 0; i < posts.length; i++) {
       postLikes = await getConnection()
