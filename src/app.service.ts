@@ -78,26 +78,27 @@ export class AppService {
     });
 
     if (user) {
-    userLikes = await getConnection()
-      .getRepository(LikePost)
-      .createQueryBuilder('likePost')
-      .leftJoinAndSelect('likePost.user', 'user')
-      .leftJoinAndSelect('likePost.post', 'post')
-      .where('likePost.user = :user', { user: user })
-      .where('likePost.post IN (:...id)', { id: id })
-      .getMany();
+      userLikes = await getConnection()
+        .getRepository(LikePost)
+        .createQueryBuilder('likePost')
+        .leftJoinAndSelect('likePost.user', 'user')
+        .leftJoinAndSelect('likePost.post', 'post')
+        .where('likePost.user = :user', { user: user })
+        .where('likePost.post IN (:...id)', { id: id })
+        .getMany();
 
-    userLikes.forEach((el_like) => {
-      for (let i = 0; i < posts.length; i++) {
-        if (
-          el_like.user.id == user.id &&
-          posts[i].id_img == el_like.post.id_img
-        ) {
-          posts[i]['like'] = true;
-          break;
+      userLikes.forEach((el_like) => {
+        for (let i = 0; i < posts.length; i++) {
+          if (
+            el_like.user.id == user.id &&
+            posts[i].id_img == el_like.post.id_img
+          ) {
+            posts[i]['like'] = true;
+            break;
+          }
         }
-      }
-    });}
+      });
+    }
 
     for (let i = 0; i < posts.length; i++) {
       postLikes = await getConnection()

@@ -49,14 +49,20 @@ export class UserService {
   }
 
   async getfollows(user): Promise<object> {
-    const follower = await this.followRepository.find({
-      where: { following: user },
-    });
+    const follower = await getConnection()
+      .getRepository(Follow)
+      .createQueryBuilder('follow')
+      .leftJoinAndSelect('follow.follower', 'follower')
+      .where('follow.following = :user', { user: user.id })
+      .getMany();
 
-    const following = await this.followRepository.find({
-      where: { follower: user },
-    });
+    const following = await getConnection()
+      .getRepository(Follow)
+      .createQueryBuilder('follow')
+      .leftJoinAndSelect('follow.following', 'following')
+      .where('follow.follower = :user', { user: user.id })
+      .getMany();
 
-    return { follower: follower.length, following: following.length };
+    return { follower: follower, following: following };
   }
 }
