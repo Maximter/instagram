@@ -26,7 +26,7 @@
       <div class="photo-section">
         <a href="/user/{{post.user.username}}" class="owner-block">
           <img src="../img/avatar/{{#if post.user.avatar}}{{post.user.id}}{{else}}standard{{/if}}.jpg" alt="{{post.user.name_lastname}}" title="{{post.user.name_lastname}}" class="owner-avatar">
-          <p class="owner-username">{{post.user.username}}</p>
+          <p class="owner-username">{{post.user.username}}</p>        
         </a>
         <img src="../img/postedPic/{{post.id_img}}.jpg" class="img">
       </div>
@@ -34,6 +34,9 @@
        <div class="under-post">
           <img src="../img/system/{{#if post.like}}liked{{else}}notification-empty{{/if}}.svg" title="Нравится" class="like" onclick="like(this, '{{post.id_img}}')">
           <img src="../img/system/copy.svg" title="Скопировать ссылку" class="copy" id="copy">
+          {{#if user.owner}}
+           <img src="../img/system/delete.svg" title="Удалить пост" class="delete" onclick="deletePost('{{post.id_img}}', '{{user.username}}')">
+          {{/if}}
 
            <p class="comment-text"><span style="font-weight: 500;" id="likes_{{post.id_img}}" likes="{{post.countLikes}}" >Отметок нравится: {{post.countLikes}}</span></p>
           <p class="comment-text"><span style="font-weight: 500;">{{post.user.username}}:</span> {{post.comment}}</p>
@@ -44,23 +47,23 @@
     <script>
       function like (el, id_img) {
         fetch(`${window.location.origin}/post/like/${id_img}`, {
-        method: "post",
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-      });
-      const count = document.getElementById(`likes_${id_img}`);
+          method: "post",
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+        });
+        const count = document.getElementById(`likes_${id_img}`);
 
-      if (el.src.indexOf('notification') > -1) {
-        el.src = "../img/system/liked.svg";
-        count.attributes.likes.value = ++count.attributes.likes.value;
-      }
-      else {
-        count.attributes.likes.value = --count.attributes.likes.value;
-        el.src = "../img/system/notification-empty.svg";
-      }
-      count.innerHTML = `Отметок нравится: ${count.attributes.likes.value}`;
+        if (el.src.indexOf('notification') > -1) {
+          el.src = "../img/system/liked.svg";
+          count.attributes.likes.value = ++count.attributes.likes.value;
+        }
+        else {
+          count.attributes.likes.value = --count.attributes.likes.value;
+          el.src = "../img/system/notification-empty.svg";
+        }
+        count.innerHTML = `Отметок нравится: ${count.attributes.likes.value}`;
       }
 
       const copy = document.getElementById('copy')
@@ -87,5 +90,45 @@
           });
       }
     </script>
+
+    {{#if user.owner}}
+    <script>
+    function deletePost(id_img, username) {
+      Swal.fire({
+      position: 'top',
+      icon: 'warning',
+      title: 'Вы действительно хотите удалить пост?',
+      confirmButtonText: 'Да',
+      showCancelButton: true,
+      cancelButtonText: 'Нет',
+      confirmButtonColor: '#ff3535',
+      cancelButtonColor: 'rgb(128 226 72)',
+    }).then((result) => {
+     
+      if (result.isConfirmed) {
+        fetch(`${window.location.origin}/post/delete/${id_img}`, {
+          method: "get",
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+        }).then(response => response.json())
+          .then(result => { 
+            Swal.fire({
+              position: 'top',
+              icon: 'success',
+              title: 'Пост был удален',
+              showConfirmButton: false,
+              timer: 1000
+            }).then(() => {
+              window.location.href = `${window.location.origin}/user/${username}`
+            })
+          })
+      }
+      
+      });
+    }
+    </script>
+    {{/if}}
   </body>
 </html>

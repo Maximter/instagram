@@ -77,4 +77,36 @@ export class PostService {
       this.like_postRepository.save(likeSystem);
     }
   }
+
+  async isOwner(user, post_id): Promise<boolean> {
+    const post = await getConnection()
+      .getRepository(User_post)
+      .createQueryBuilder('user_post')
+      .leftJoinAndSelect('user_post.user', 'user')
+      .where('user_post.id_img = :id', { id: post_id })
+      .getOne();
+
+    if (post.user.id == user.id) return true;
+    else return false;
+  }
+
+  async deletePost(user, post_id): Promise<void> {
+    const post = await getConnection()
+      .getRepository(User_post)
+      .createQueryBuilder('user_post')
+      .leftJoinAndSelect('user_post.user', 'user')
+      .where('user_post.id_img = :id', { id: post_id })
+      .getOne();
+
+    if (post.user.id != user.id) return;
+    const postLikes = await getConnection()
+      .getRepository(LikePost)
+      .createQueryBuilder('likePost')
+      .leftJoinAndSelect('likePost.post', 'post')
+      .where('likePost.post = :id', { id: post.id_img })
+      .getMany();
+
+    this.like_postRepository.remove(postLikes);
+    this.user_postRepository.remove(post);
+  }
 }

@@ -25,14 +25,24 @@ export class PostController {
     return res.render('post', { user: user });
   }
 
+  @Get('delete/:id')
+  async deletePost(@Req() req: Request, @Res() res: Response) {
+    const user = await this.appService.getUser(req);
+    await this.postService.deletePost(user, req.params.id);
+    res.json('');
+    res.end();
+  }
+
   @Get('/:id')
   async renderPost(@Req() req: Request, @Res() res: Response) {
     const user = await this.appService.getUser(req);
     const postInfo = await this.postService.getPostInfo(req.params.id);
     const post = await this.appService.getLikes(user, [postInfo]);
 
-    if (user) return res.render('postImg', { user: user, post: post[0] });
-    else return res.render('postImg', { post: post[0] });
+    if (user) {
+      user['owner'] = await this.postService.isOwner(user, req.params.id);
+      return res.render('postImg', { user: user, post: post[0] });
+    } else return res.render('postImg', { post: post[0] });
   }
 
   @Post()
