@@ -40,7 +40,7 @@
                 <img src="../img/system/copy.svg" title="Скопировать ссылку" class="copy" id="copy" onclick="copy('/post/{{this.id_img}}')">
 
                 <p class="comment-text"><span style="font-weight: 500;" id="likes_{{this.id_img}}" likes="{{this.countLikes}}" >Отметок нравится: {{this.countLikes}}</span></p>
-                <p class="comment-text"><a href="user/{{this.user.username}}"><span style="font-weight: 500;">{{this.user.username}}:</span></a>{{this.comment}}</p>
+                <p class="comment-text"><a href="user/{{this.user.username}}"><span style="font-weight: 500;">{{this.user.username}}:</span></a> {{this.comment}}</p>
               </div>
             </li>
           {{/each}}

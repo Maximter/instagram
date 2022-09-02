@@ -13,7 +13,7 @@ export class RecommendationController {
   @Get()
   async renderPostPage(@Req() req: Request, @Res() res: Response) {
     const user = await this.appService.getUser(req);
-    const posts = await this.recommendationService.getPopularPosts();    
+    const posts = await this.recommendationService.getPopularPosts();
     return res.render('recommendation', { user: user, post: posts });
   }
 

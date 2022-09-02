@@ -25,7 +25,6 @@ export class RecommendationService {
       .createQueryBuilder('likePost')
       .leftJoinAndSelect('likePost.post', 'post')
       .where('post.date_post > :date', { date: monthAgo })
-      .take(30)
       .getMany();
 
     let countLikes = [[allLikes[0].post.id_img, 1]];
@@ -44,6 +43,7 @@ export class RecommendationService {
     }
     countLikes.sort(this.compareSecondColumn);
     countLikes.reverse();
+    countLikes.length = 30;
 
     return countLikes;
   }
