@@ -37,8 +37,9 @@ export class NotificationService {
       .leftJoinAndSelect('like_post.post', 'post')
       .leftJoinAndSelect('like_post.user', 'user')
       .where('like_post.post IN (:...id)', { id: id_img })
+      .where('like_post.user != :id', { id: user.id })
       .orderBy('like_post.id', 'DESC')
-      .take(9)
+      .take(14)
       .getMany();
 
     let follow = await getConnection()

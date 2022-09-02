@@ -37,7 +37,7 @@ export class AppService {
   }
 
   async getPosts(user) {
-    const id: number[] = [];
+    const id: number[] = [user.id];
 
     const followings = await getConnection()
       .getRepository(Follow)

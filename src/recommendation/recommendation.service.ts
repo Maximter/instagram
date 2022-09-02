@@ -19,13 +19,13 @@ export class RecommendationService {
   ) {}
 
   async getPopularPosts(): Promise<object[]> {
-    const weekAgo = Date.now() - 604800000;
+    const monthAgo = Date.now() - 2592000000;
     const allLikes = await getConnection()
       .getRepository(LikePost)
       .createQueryBuilder('likePost')
       .leftJoinAndSelect('likePost.post', 'post')
-      .where('post.date_post > :date', { date: weekAgo })
-      .take(20)
+      .where('post.date_post > :date', { date: monthAgo })
+      .take(30)
       .getMany();
 
     let countLikes = [[allLikes[0].post.id_img, 1]];
