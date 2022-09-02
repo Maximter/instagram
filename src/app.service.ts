@@ -51,6 +51,7 @@ export class AppService {
       id.push(element.following.id);
     });
 
+
     let followingPosts = [];
     if (id.length != 0) {
       followingPosts = await getConnection()
@@ -58,10 +59,9 @@ export class AppService {
         .createQueryBuilder('user_post')
         .leftJoinAndSelect('user_post.user', 'user')
         .where('user_post.user IN (:...id)', { id: id })
-        .orderBy('user_post.date_post')
+        .orderBy('user_post.date_post', 'DESC')
+        .take(10)
         .getMany();
-      followingPosts.reverse();
-      followingPosts.length = 10;
     }
 
     return followingPosts;
@@ -110,9 +110,6 @@ export class AppService {
 
       posts[i]['countLikes'] = postLikes.length;
     }
-
-    console.log();
-
     return posts;
   }
 }

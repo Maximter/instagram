@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { LikePost } from 'entity/like.entity';
 import { User } from 'entity/user.entity';
+import { User_post } from 'entity/user_post.entity';
 import { getConnection, Repository } from 'typeorm';
 
 @Injectable()
@@ -9,6 +10,9 @@ export class RecommendationService {
   constructor(
     @InjectRepository(LikePost)
     private like_postRepository: Repository<LikePost>,
+
+    @InjectRepository(User_post)
+    private user_postRepository: Repository<User_post>,
 
     @InjectRepository(User)
     private userRepository: Repository<User>,
@@ -58,5 +62,27 @@ export class RecommendationService {
   compareSecondColumn(a, b) {
     if (a[1] === b[1]) return 0;
     else return a[1] < b[1] ? -1 : 1;
+  }
+
+  async getPopularPostsFullData(countLikes): Promise<object[]> {
+    const id_img = [];
+    for (let i = 0; i < countLikes.length; i++) id_img.push(countLikes[i][0])
+    
+    const popularPosts = await getConnection()
+        .getRepository(User_post)
+        .createQueryBuilder('user_post')
+        .leftJoinAndSelect('user_post.user', 'user')
+        .where('user_post.id_img IN (:...id)', { id: id_img })
+        .getMany();
+      
+    const rightOrder = [];
+    for (let i = 0; i < id_img.length; i++) 
+      for (let j = 0; i < popularPosts.length; j++) 
+        if (popularPosts[j].id_img == id_img[i]) {
+          rightOrder.push(popularPosts[j])
+          break;
+        }
+
+    return rightOrder;
   }
 }

@@ -23,10 +23,32 @@
     <canvas class="background"> </canvas>
 
     <section class="main-section" id="main-section">
-      {{#if posts}}
+      
         <ul>
+          {{#if posts}}
           {{#each posts}}
             <li>
+              <a href="/user/{{this.user.username}}" class="owner-block">
+                <img src="../img/avatar/{{#if this.user.avatar}}{{this.user.id}}{{else}}standard{{/if}}.jpg" alt="{{this.user.name_lastname}}" title="{{this.user.name_lastname}}" class="owner-avatar">
+                <p class="owner-username">{{this.user.username}}</p>
+              </a>
+              <a href="/post/{{this.id_img}}">
+                <img src="/img/postedPic/{{this.id_img}}.jpg" class="post-pic" title="{{this.comment}}">
+              </a>
+              <div class="under-post">
+                <img src="../img/system/{{#if this.like}}liked{{else}}notification-empty{{/if}}.svg" title="Нравится" class="like" onclick="like(this, '{{this.id_img}}')">
+                <img src="../img/system/copy.svg" title="Скопировать ссылку" class="copy" id="copy" onclick="copy('/post/{{this.id_img}}')">
+
+                <p class="comment-text"><span style="font-weight: 500;" id="likes_{{this.id_img}}" likes="{{this.countLikes}}" >Отметок нравится: {{this.countLikes}}</span></p>
+                <p class="comment-text"><a href="user/{{this.user.username}}"><span style="font-weight: 500;">{{this.user.username}}:</span></a>{{this.comment}}</p>
+              </div>
+            </li>
+          {{/each}}
+          <button class="button_more" onclick="window.location='/recommendation'">Смотреть популярные посты</button>
+          {{else}}
+            <h1 style="text-align: center; margin: 25px 0 20px 0;">Популярное</h1>
+            {{#each recommendation}}
+              <li>
               <a href="/user/{{this.user.username}}" class="owner-block">
                 <img src="../img/avatar/{{#if this.user.avatar}}{{this.user.id}}{{else}}standard{{/if}}.jpg" alt="{{this.user.name_lastname}}" title="{{this.user.name_lastname}}" class="owner-avatar">
                 <p class="owner-username">{{this.user.username}}</p>
@@ -42,14 +64,8 @@
                 <p class="comment-text"><span style="font-weight: 500;">{{this.user.username}}:</span> {{this.comment}}</p>
               </div>
             </li>
-          {{/each}}
-        </ul>
-        
-      {{else}}
-        <div class="post-section">
-          <h1>Дурак, подпишись на кого-нибудь</h1>
-        </div>
-      {{/if}}
+            {{/each}}
+          {{/if}}
     </section>
 
   <script src = "https://cdnjs.cloudflare.com/ajax/libs/particlesjs/2.2.3/particles.min.js"></script>
