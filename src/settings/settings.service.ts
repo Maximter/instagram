@@ -2,9 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'entity/user.entity';
 import { VerificationService } from 'src/verification/verification.service';
-import { Repository } from 'typeorm';
+import { Repository, getConnection } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import * as fs from 'fs';
+import * as uuid from 'uuid';
+import { Token } from 'entity/token.entity';
 
 const saltForHash = 7;
 
@@ -13,6 +15,9 @@ export class SettingsService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
+
+    @InjectRepository(Token)
+    private tokenRepository: Repository<Token>,
 
     private readonly verificationService: VerificationService,
   ) {}
@@ -133,10 +138,12 @@ export class SettingsService {
     }
     if (await bcrypt.compare(oldPass, user.password)) {
       const hashPassword: string = await bcrypt.hash(newPass, saltForHash);
+      const newToken = await uuid.v4();  
       user.password = hashPassword;
 
       await this.userRepository.save(user);
-      return { valid: true };
+      await this.tokenRepository.update({ user: user }, { token: newToken } );
+      return { valid: true }; 
     } else {
       return {
         valid: false,
