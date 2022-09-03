@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Chat } from 'entity/chat.entity';
+import { ChatInfo } from 'entity/chat.info.entity';
 import { Message } from 'entity/message.entity';
 import { User } from 'entity/user.entity';
 import { getRepository, Repository } from 'typeorm';
@@ -63,5 +64,40 @@ export class ChatService {
         })
 
         return messages
+    }
+
+    async getChats(user): Promise<object[]> {
+        const id_chats = [];
+        const chats = await getRepository(Chat)
+            .createQueryBuilder('chat')
+            .leftJoinAndSelect('chat.member', 'member')
+            .where('chat.member = :id', { id: user.id })
+            .getMany(); 
+
+        for (let i = 0; i < chats.length; i++) id_chats.push(chats[i].id_chat);
+        if (chats.length == 0) return [];
+
+        const chatsInfo = await getRepository(ChatInfo)
+            .createQueryBuilder('chatInfo')
+            .leftJoinAndSelect('chatInfo.last_message_sender', 'sender')
+            .where('chatInfo.chat IN (:...id)', { id: id_chats })
+            .getMany();
+            
+        for (let i = 0; i < chats.length; i++) {
+            chatsInfo[i]['last_message_time'] = new Date(+chatsInfo[i]['last_message_time']).toLocaleTimeString().slice(0,-3);
+            chats[i]['info'] = chatsInfo[i];
+            if (chatsInfo[i].last_message_sender.id == user.id) chats[i]['sender'] = true;
+            else chats[i]['sender'] = false;
+            
+            const chatInterlocutor = await getRepository(Chat)
+                .createQueryBuilder('chat')
+                .leftJoinAndSelect('chat.member', 'member')
+                .where('chat.id_chat = :id and chat.member <> :id_user', { id: chats[i].id_chat, id_user: user.id })
+                .getOne();
+            
+            chats[i]['interlocutor'] = chatInterlocutor.member;      
+        }           
+         
+        return chats;
     }
 }

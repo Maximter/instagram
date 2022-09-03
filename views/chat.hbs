@@ -23,9 +23,22 @@
     
   <!-- ЧАТЫ -->
   <section class="main-section">
-      <div class="chats">
-
-      </div>
+      <ul class="chats">
+        {{#each chats}}
+          <li class="chat" id_chat="{{this.id_chat}}" id="chat" online="{{this.interlocutor.online}}" lastMessage="{{#if this.sender}}Вы: {{/if}}{{this.info.last_message_content}}">
+               <img src="./../img/avatar/{{#if this.interlocutor.avatar}}{{this.interlocutor.id}}{{else}}standard{{/if}}.jpg" id_chat="{{this.id_chat}}" alt="{{this.interlocutor.name_lastname}}" title="{{this.interlocutor.name_lastname}}" class="chatAvatarImg">
+              <div class="onlinePoint" id="onlinePoint" id_chat="{{this.id_chat}}" style="display:none"></div>
+              <div>
+                  <p id="chatName" id_chat="{{this.id_chat}}" class="lastSenderText">{{this.interlocutor.name_lastname}}</p>
+                  <p id="lastMessage" id_chat="{{this.id_chat}}" class="lastMessageText">{{#if this.sender}}Вы: {{/if}}{{this.info.last_message_content}}</p>
+              </div>
+              <div>
+                  <p id="time_last_message" class="time_last_message">{{this.info.last_message_time}}</p>
+                  <div id="read" class="{{#if this.unread}}{{else}}bluePoint{{/if}}">{{this.unread}}</div>
+              </div>                             
+          </li>
+        {{/each}}
+      </ul>
 
       <div class="chatBox">
           <div class="chatInfo" id="chatInfo">
@@ -68,9 +81,13 @@
   <script src="../js/messenger.js"></script>
   <script src="../js/parseDate.js"></script>
   <script>
+   
+    {{#if interlocutor}}
     activeConversation = 'none';
     idInterlocutor = '{{interlocutor.id}}';
     status.textContent = wasOnline('{{interlocutor.online}}')
+    {{/if}}
+    
   </script>
   </body>
 </html>

@@ -48,12 +48,10 @@ export class SocketService {
       where: { chat: id_chat },
     });
 
-    this.chatInfoRepository.save({
-      chat: ai_chat.chat,
-      last_message_content: message,
-      last_message_sender: user,
-      last_message_time: date,
-    });
+    ai_chat.last_message_content = message;
+    ai_chat.last_message_sender = user;
+    ai_chat.last_message_time = date;
+    this.chatInfoRepository.save(ai_chat);
 
     const savedMessage: Message = this.messageRepository.create({
       chat: id_chat,

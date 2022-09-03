@@ -21,14 +21,16 @@ export class ChatController {
   @Get()
   async renderPostPage(@Req() req: Request, @Res() res: Response) {
     const user = await this.appService.getUser(req);
-    return res.render('chat', { user: user });
+    const chats = await this.chatService.getChats(user);    
+    return res.render('chat', { user: user, chats : chats });
   }
 
   @Get('/:username')
   async renderChat(@Req() req: Request, @Res() res: Response) {    
     const user = await this.appService.getUser(req);
+    const chats = await this.chatService.getChats(user);    
     const interlocutor = await this.chatService.getInterlocutor(req.params.username);
     const messages = await this.chatService.getMessages(user, interlocutor);    
-    return res.render('chat', { user: user, interlocutor : interlocutor, messages : messages });
+    return res.render('chat', { user: user, chats : chats,  interlocutor : interlocutor, messages : messages });
   }
 }
