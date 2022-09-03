@@ -16,9 +16,8 @@ import { Chat } from './chat.entity';
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne(() => Chat)
-    @JoinColumn()
-    chat: Chat;
+    @Column()
+    chat: string;
 
     @Column()
     last_message_content : string;
@@ -26,7 +25,8 @@ import { Chat } from './chat.entity';
     @Column()
     last_message_time : string;
 
-    @Column()
-    last_message_sender : number;
+    @ManyToOne(() => User)
+    @JoinColumn()
+    last_message_sender: User;
   } 
   

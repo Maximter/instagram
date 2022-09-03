@@ -44,7 +44,14 @@
           </div>
 
           <div class="messageBox" id="messageBox">
-              <ul class="outputmessages" id="outputMessages"></ul>
+              <ul class="outputmessages" id="outputMessages">
+                {{#each messages}}
+                  <li class="message {{#if im-sender}}own{{else}}interlocutor{{/if}}">
+                      <p>{{this.content}}</p>
+                      <date style="font-size:12px">{{this.sent_date}}</date>
+                  </li>
+                {{/each}}
+              </ul>
           </div>
 
           <div class="inputBox">
@@ -53,12 +60,16 @@
           </div>
       </div>
   </section>
+
+  <script src="//code.jquery.com/jquery-2.0.2.min.js"></script>
   <script src="/socket.io/socket.io.js"></script>
+  <script src="../js/messenger_constants.js"></script>
   <script src="../js/sockets.js"></script>
+  <script src="../js/messenger.js"></script>
   <script src="../js/parseDate.js"></script>
   <script>
-    const status = document.getElementById('status');
-
+    activeConversation = 'none';
+    idInterlocutor = '{{interlocutor.id}}';
     status.textContent = wasOnline('{{interlocutor.online}}')
   </script>
   </body>

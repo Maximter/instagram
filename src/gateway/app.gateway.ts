@@ -23,11 +23,11 @@ export class AppGateway
   private logger: Logger = new Logger('AppGateway');
 
   // отправка первого сообщения пользователю
-  // @SubscribeMessage('sendFirstMessage')
-  // async sendFirstMessage(client: Socket, payload: string): Promise<void> {
-  //   const existed_chat = await this.socketService.createChat(client, payload);
-  //   if (existed_chat['exist'])
-  //     this.sendMessage(client, [payload[0], existed_chat['id_chat']]);
+  @SubscribeMessage('sendFirstMessage')
+  async sendFirstMessage(client: Socket, payload: string): Promise<void> {
+    const existed_chat = await this.socketService.createChat(client, payload);
+    if (existed_chat['exist'])
+      this.sendMessage(client, [payload[0], existed_chat['id_chat']]);
   //   else {
   //     const interlocutorInfo = await this.socketService.getInterlocutorsInfo(
   //       payload[1],
@@ -57,12 +57,12 @@ export class AppGateway
   //         .emit('addNewConversation', user, existed_chat['id_chat']);
   //     });
   //   }
-  // }
+  }
 
   // отправка сообщения
   @SubscribeMessage('sendMessage')
   async sendMessage(client: Socket, payload: string[]): Promise<void> {
-    // this.socketService.saveMessageToDB(client, payload);
+    this.socketService.saveMessageToDB(client, payload);
     // const token = await this.socketService.getInterlocutorsToken(
     //   client,
     //   payload[1],

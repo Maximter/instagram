@@ -7,6 +7,7 @@ import { getConnection, getManager, getRepository, Repository } from 'typeorm';
 import * as online from '../online';
 import * as uuid from 'uuid';
 import { UrlWithStringQuery } from 'url';
+import { Message } from 'entity/message.entity';
 // import { Message } from 'entity/message.entity';
 const fs = require('fs');
 
@@ -18,49 +19,50 @@ export class SocketService {
     @InjectRepository(Token)
     private tokenRepository: Repository<Token>,
 
-    // @InjectRepository(Chat)
-    // private chatRepository: Repository<Chat>,
+    @InjectRepository(Chat)
+    private chatRepository: Repository<Chat>,
 
-    // @InjectRepository(ChatInfo)
-    // private chatInfoRepository: Repository<ChatInfo>,
+    @InjectRepository(ChatInfo)
+    private chatInfoRepository: Repository<ChatInfo>,
 
-    // @InjectRepository(Message)
-    // private messageRepository: Repository<Message>,
+    @InjectRepository(Message)
+    private messageRepository: Repository<Message>,
   ) {}
 
-  // async saveMessageToDB(client, payload): Promise<void> {
-  //   const message = payload[0];
-  //   const id_chat = payload[1];
-  //   const date = `${Date.now()}`;
+  async saveMessageToDB(client, payload): Promise<void> {
+    const message = payload[0];
+    const id_chat = payload[1];
+    const date = `${Date.now()}`;
 
-  //   const token = await SocketService.getToken(client);
-  //   const tokenEntity = await getConnection()
-  //     .getRepository(Token)
-  //     .createQueryBuilder('token')
-  //     .leftJoinAndSelect('token.user', 'user')
-  //     .where('token.token = :token', { token: token })
-  //     .getOne();
+    const token = await SocketService.getToken(client);
+    const tokenEntity = await getConnection()
+      .getRepository(Token)
+      .createQueryBuilder('token')
+      .leftJoinAndSelect('token.user', 'user')
+      .where('token.token = :token', { token: token })
+      .getOne();
 
-  //   const user = tokenEntity.user;
+    const user = tokenEntity.user;
 
-  //   const ai_chat = await this.chatInfoRepository.findOne({
-  //     where: { chat: id_chat },
-  //   });
+    const ai_chat = await this.chatInfoRepository.findOne({
+      where: { chat: id_chat },
+    });
 
-  //   this.chatInfoRepository.save({
-  //     id_chat_info: ai_chat.id_chat_info,
-  //     last_message_content: message,
-  //     last_message_sender: user.id_user,
-  //     last_message_time: date,
-  //   });
+    this.chatInfoRepository.save({
+      chat: ai_chat.chat,
+      last_message_content: message,
+      last_message_sender: user,
+      last_message_time: date,
+    });
 
-  //   this.messageRepository.save({
-  //     id_chat: id_chat,
-  //     content: message,
-  //     id_sender: user.id_user,
-  //     message_sent: date,
-  //   });
-  // }
+    const savedMessage: Message = this.messageRepository.create({
+      chat: id_chat,
+      content: message,
+      sender: user,
+      sent_date: `${Date.now()}`,
+    });
+    await this.messageRepository.save(savedMessage);
+  }
 
   // async getInterlocutorsToken(client, id_chat): Promise<string[]> {
   //   const my_token = await SocketService.getToken(client);
@@ -110,63 +112,61 @@ export class SocketService {
   //   return interlocutor;
   // }
 
-  // async createChat(client, payload): Promise<object> {
-  //   const message = payload[0].trim();
-  //   const id_interlocutor = payload[1];
+  async createChat(client, payload) {
+    const message = payload[0].trim();
+    const idInterlocutor = payload[1];
 
-  //   const token = await SocketService.getToken(client);
-  //   const tokenEntity = await getConnection()
-  //     .getRepository(Token)
-  //     .createQueryBuilder('token')
-  //     .leftJoinAndSelect('token.user', 'user')
-  //     .where('token.token = :token', { token: token })
-  //     .getOne();
+    const token = await SocketService.getToken(client);
+    const tokenEntity = await getConnection()
+      .getRepository(Token)
+      .createQueryBuilder('token')
+      .leftJoinAndSelect('token.user', 'user')
+      .where('token.token = :token', { token: token })
+      .getOne();
 
-  //   const user = tokenEntity.user;
-  //   const interlocutor = await this.userRepository.findOne({
-  //     where: { id_user: id_interlocutor },
-  //   });
+    const user = tokenEntity.user;
+    const interlocutor = await this.userRepository.findOne({
+      where: { id: idInterlocutor },
+    });
 
-  //   const existed_chat = await this.checkExistchat(user, interlocutor);
+    const existed_chat = await this.checkExistchat(user, interlocutor);
+    if (existed_chat != '') return { id_chat: existed_chat, exist: true };
 
-  //   if (existed_chat != '') return { id_chat: existed_chat, exist: true };
+    const chat_id: string = await uuid.v4();
 
-  //   const chat_id: string = await uuid.v4();
+    await getManager().transaction(async (transactionalEntityManager) => {
+      const newChat1: Chat = await this.chatRepository.create({
+        id_chat: chat_id,
+        member: user,
+      });
 
-  //   await getManager().transaction(async (transactionalEntityManager) => {
-  //     const newChat1: Chat = this.chatRepository.create({
-  //       chat_id: chat_id,
-  //       member: user,
-  //     });
+      const newChat2: Chat = await this.chatRepository.create({
+        id_chat: chat_id,
+        unread: 1,
+        member: interlocutor,
+      });
+      
+      const newChatInfo: ChatInfo = this.chatInfoRepository.create({
+        chat: chat_id,
+        last_message_content: message,
+        last_message_time: `${Date.now()}`,
+        last_message_sender: user,
+      });
 
-  //     const newChat2: Chat = this.chatRepository.create({
-  //       chat_id: chat_id,
-  //       unread: 1,
-  //       member: interlocutor,
-  //     });
+      await transactionalEntityManager.save(newChat1);     
+      await transactionalEntityManager.save(newChat2);
+      await transactionalEntityManager.save(newChatInfo);
+    });
 
-  //     this.messageRepository.save({
-  //       id_chat: chat_id,
-  //       content: message,
-  //       id_sender: user.id_user,
-  //       message_sent: `${Date.now()}`,
-  //     });
-
-  //     await transactionalEntityManager.save(newChat1);
-  //     await transactionalEntityManager.save(newChat2);
-
-  //     const newChatInfo: ChatInfo = this.chatInfoRepository.create({
-  //       chat: chat_id,
-  //       last_message_content: message,
-  //       last_message_time: `${Date.now()}`,
-  //       last_message_sender: user.id_user,
-  //     });
-
-  //     await transactionalEntityManager.save(newChatInfo);
-  //   });
-
-  //   return { id_chat: chat_id, exist: false };
-  // }
+    const savedMessage: Message = this.messageRepository.create({
+      chat: chat_id,
+      content: message,
+      sender: user,
+      sent_date: `${Date.now()}`,
+    });
+    await this.messageRepository.save(savedMessage);
+    return { id_chat: chat_id, exist: false };
+  }
 
   // async getUserTokens(client): Promise<string[]> {
   //   const my_token = await SocketService.getToken(client);
@@ -175,29 +175,29 @@ export class SocketService {
   //   else return [];
   // }
 
-  // async checkExistchat(user, interlocutor): Promise<string> {
-  //   const userChats = [];
-  //   const userEntityChats = await this.chatRepository.find({
-  //     where: { member: user },
-  //   });
+  async checkExistchat(user, interlocutor): Promise<string> {
+    const userChats = [];
+    const userEntityChats = await this.chatRepository.find({
+      where: { member: user },
+    });
 
-  //   if (userEntityChats.length == 0) return '';
+    if (userEntityChats.length == 0) return '';
 
-  //   for (let i = 0; i < userEntityChats.length; i++)
-  //     userChats.push(userEntityChats[i].chat_id);
+    for (let i = 0; i < userEntityChats.length; i++)
+      userChats.push(userEntityChats[i].id_chat);
 
-  //   const membersTheChat = await getRepository(Chat)
-  //     .createQueryBuilder('chat')
-  //     .leftJoinAndSelect('chat.member', 'member')
-  //     .where('chat.chat_id IN (:...id)', { id: userChats })
-  //     .getMany();
+    const membersTheChat = await getRepository(Chat)
+      .createQueryBuilder('chat')
+      .leftJoinAndSelect('chat.member', 'member')
+      .where('chat.id_chat IN (:...id)', { id: userChats })
+      .getMany();
+    
+    for (let i = 0; i < membersTheChat.length; i++)
+      if (membersTheChat[i].member.id == interlocutor.id)
+        return membersTheChat[i].id_chat;
 
-  //   for (let i = 0; i < membersTheChat.length; i++)
-  //     if (membersTheChat[i].member.id_user == interlocutor.id_user)
-  //       return membersTheChat[i].chat_id;
-
-  //   return '';
-  // }
+    return '';
+  }
 
   async pushToOnline(client): Promise<void> {
     const token = await SocketService.getToken(client); 

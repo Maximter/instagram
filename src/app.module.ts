@@ -28,11 +28,14 @@ import { RecommendationService } from './recommendation/recommendation.service';
 import { ChatModule } from './chat/chat.module';
 import { SocketService } from './gateway/app.gateway.service';
 import { AppGateway } from './gateway/app.gateway';
+import { Chat } from 'entity/chat.entity';
+import { ChatInfo } from 'entity/chat.info.entity';
+import { Message } from 'entity/message.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(),
-    TypeOrmModule.forFeature([User, Token, User_post, Follow, LikePost]),
+    TypeOrmModule.forFeature([User, Token, User_post, Follow, LikePost, Chat, ChatInfo, Message]),
     MailerModule.forRoot({
       transport: {
         host: process.env.YANDEX_HOST,

@@ -13,14 +13,17 @@ import {
   
   @Entity()
   export class Chat extends BaseEntity {
-    @PrimaryColumn({ unique : true, length : 65 })
-    chat_id : string;
+    @PrimaryGeneratedColumn()
+    id: number;
+
+    @PrimaryColumn({ length : 65 })
+    id_chat : string;
   
     @ManyToOne(() => User)
     @JoinColumn()
     member: User;
 
     @Column({ default : 0 })
-    unread : number;
+    unread? : number;
   } 
   
