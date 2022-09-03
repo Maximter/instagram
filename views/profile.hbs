@@ -31,6 +31,7 @@
           {{#if user.owner}}
             <button class="settings-button" onclick="window.location='/settings'">Настройки</button>
           {{else}}
+          <button class="follow-button" onclick="window.location='/chat/{{owner.username}}'">Написать сообщение</button>
           <form action="/follow/{{owner.username}}" method="post">
             {{#if user.follow}}
             <button class="unfollow-button">Отписаться</button>
@@ -64,6 +65,9 @@
       </ul>
     </section>
 
+
+<script src="/socket.io/socket.io.js"></script>
+  <script src="../js/sockets.js"></script>
   <script src="../js/sweetalert2.all.min.js"></script>
   <script>
     const get_followers = document.getElementById('get_followers')

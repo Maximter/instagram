@@ -25,6 +25,9 @@ import { SettingsController } from './settings/settings.controller';
 import { RecommendationController } from './recommendation/recommendation.controller';
 import { NotificationController } from './notification/notification.controller';
 import { RecommendationService } from './recommendation/recommendation.service';
+import { ChatModule } from './chat/chat.module';
+import { SocketService } from './gateway/app.gateway.service';
+import { AppGateway } from './gateway/app.gateway';
 
 @Module({
   imports: [
@@ -53,9 +56,10 @@ import { RecommendationService } from './recommendation/recommendation.service';
     SettingsModule,
     NotificationModule,
     RecommendationModule,
+    ChatModule,
   ],
   controllers: [AppController],
-  providers: [AppService, RecommendationService],
+  providers: [AppService, RecommendationService, SocketService, AppGateway],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

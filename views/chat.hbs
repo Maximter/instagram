@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <title>Instyle</title>
+    <link rel="stylesheet" type="text/css" href="../css/chat.css"/>
+    <link rel="shortcut icon" type="image/x-icon" href="../img/system/title-logo.png" />
+  </head>
+  <body>
+    <header>
+      <section>
+        <a href="/"><p class="logo-name">Instyle</p></a>
+        <div class="header-icons">
+          <a href="/"><img src="../img/system/home-empty.svg" alt="Главная страница" title="Главная страница"></a>
+          <a href="/chat"><img src="../img/system/chat-fill.svg" alt="Мессенджер" title="Мессенджер"></a>
+          <a href="/post"><img src="../img/system/add-empty.svg" alt="Добавить фотографию" title="Добавить фотографию"></a>
+          <a href="/recommendation"><img src="../img/system/compass-empty.svg" alt="Рекомендуемое" title="Рекомендуемое"></a>
+          <a href="/notification"><img src="../img/system/notification-empty.svg" alt="Уведомления" title="Уведомления"></a>
+          <a href="/user/{{user.username}}"><img src="../img/avatar/{{#if user.avatar}}{{user.id}}{{else}}standard{{/if}}.jpg" alt="{{user.name_lastname}}" title="{{user.name_lastname}}" class="user-avatar"></a>
+        </div>
+      </section>
+    </header>
+    
+  <!-- ЧАТЫ -->
+  <section class="main-section">
+      <div class="chats">
+
+      </div>
+
+      <div class="chatBox">
+          <div class="chatInfo" id="chatInfo">
+              <div class="chatInfoBlock">
+                  <a href="/user/{{interlocutor.username}}"><p class="chatInfoName" id="chatInfoName">{{interlocutor.name_lastname}}</p></a>
+                  <div >
+                      <div id="typing"></div>
+                      <div class="onlineBlock"></div>
+                      <p id="status" class="chatOnlineText"></p>
+                  </div>
+              </div>
+
+              <a href="/user/{{interlocutor.username}}">
+                <img src="./../img/avatar/{{#if interlocutor.avatar}}{{interlocutor.id}}{{else}}standard{{/if}}.jpg" class="chatInfoImg" id="chatInfoImg" title="{{interlocutor.username}}" style="{{#if interlocutor}} {{else}}display: none;{{/if}}">
+              </a>
+          </div>
+
+          <div class="messageBox" id="messageBox">
+              <ul class="outputmessages" id="outputMessages"></ul>
+          </div>
+
+          <div class="inputBox">
+              <input id="message" placeholder="Введите сообщение..." class="inputText" autocomplete="off">
+              <img class="imgSend" id="send" src='../img/system/send.svg'>
+          </div>
+      </div>
+  </section>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="../js/sockets.js"></script>
+  <script src="../js/parseDate.js"></script>
+  <script>
+    const status = document.getElementById('status');
+
+    status.textContent = wasOnline('{{interlocutor.online}}')
+  </script>
+  </body>
+</html>

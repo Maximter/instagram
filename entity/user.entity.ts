@@ -30,4 +30,7 @@ export class User {
 
   @Column({ default: false })
   verificated? : boolean;
+
+  @Column({ default : '1' })
+  online? : string;
 }
