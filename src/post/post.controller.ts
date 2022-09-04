@@ -12,6 +12,15 @@ import { Request, Response } from 'express';
 import { AppService } from 'src/app.service';
 import { PostService } from './post.service';
 
+const imageFilter = function(req, file, cb) {
+  // Accept images only
+  if (!file.originalname.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF)$/)) {
+      req.fileValidationError = 'Only image files are allowed!';      
+      return cb(null, false);
+  }
+  cb(null, true);
+};
+
 @Controller('post')
 export class PostController {
   constructor(
@@ -46,7 +55,9 @@ export class PostController {
   }
 
   @Post()
-  @UseInterceptors(FileInterceptor('photo', { dest: 'public/img/rowImg' }))
+  @UseInterceptors(FileInterceptor('photo', { dest: 'public/img/rowImg', 
+    limits : { fileSize: 1024 * 1024 * 50, files: 1, }, 
+    fileFilter : imageFilter, }))
   async downloadPic(
     @Req() req: Request,
     @Res() res: Response,

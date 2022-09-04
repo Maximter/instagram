@@ -25,6 +25,17 @@ export class ChatController {
     return res.render('chat', { user: user, chats : chats });
   }
 
+  @Get('getMessages')
+  async getMessages(@Req() req: Request, @Res() res: Response) {
+    const user = await this.appService.getUser(req);
+    const messages = await this.chatService.getMessagesById(
+      req.query.id_chat,
+      user.id,
+    );
+    
+    res.json(messages);
+  }
+
   @Get('/:username')
   async renderChat(@Req() req: Request, @Res() res: Response) {    
     const user = await this.appService.getUser(req);

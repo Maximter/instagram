@@ -66,6 +66,20 @@ export class ChatService {
         return messages
     }
 
+    async getMessagesById(id_chat, id_user): Promise<Message[]> {
+        const messages = await getRepository(Message)
+            .createQueryBuilder('message')
+            .leftJoinAndSelect('message.sender', 'sender')
+            .where('message.chat = :id', { id: id_chat })
+            .getMany();
+    
+        messages.forEach((element) => {
+          if (element.sender.id != id_user) delete element.sender;
+        });
+    
+        return messages;
+      }
+
     async getChats(user): Promise<object[]> {
         const id_chats = [];
         const chats = await getRepository(Chat)
