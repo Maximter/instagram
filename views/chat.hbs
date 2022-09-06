@@ -83,6 +83,7 @@
   <script>
    
     {{#if interlocutor}}
+    outputMessages.scrollTop = outputMessages.scrollHeight
     activeConversation = 'none';
     idInterlocutor = '{{interlocutor.id}}';
     status.textContent = wasOnline('{{interlocutor.online}}')

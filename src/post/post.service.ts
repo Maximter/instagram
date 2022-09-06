@@ -108,5 +108,9 @@ export class PostService {
 
     this.like_postRepository.remove(postLikes);
     this.user_postRepository.remove(post);
+
+    fs.unlink(`./public/img/postedPic/${post_id}.jpg`, (err) => {
+      if (err) throw err;
+    });
   }
 }
