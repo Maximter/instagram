@@ -34,7 +34,16 @@
       <h2 class="name-popular">Популярное</h2>
       <ul>
          {{#each post}}
-          <li><a href="/post/{{this.[0]}}"><img src="/img/smallPostedPic/{{this.[0]}}.jpg" class="post-pic"></a></li>
+          <li>
+            <a href="/post/{{this.[0]}}">
+            {{#if this.[2]}}
+              <img src="/img/postedPic/{{this.[0]}}.gif" class="post-pic" title="{{this.comment}}">
+              {{else}}
+              <img src="/img/smallPostedPic/{{this.[0]}}.jpg" class="post-pic" title="{{this.comment}}">
+            {{/if}}
+            </a>
+          </li>
+          
          {{/each}}
       </ul>
     </section>
@@ -62,8 +71,8 @@
           .then(result => {
             divUser.style = "display: flex;";
             divUser.href = `/user/${result.username}`;
-            if (result.avatar) imgUser.src = `../img/avatar/${result.id}.jpg`;
-            else imgUser.src = `../img/avatar/standard.jpg`;
+            if (result.avatar) imgUser.src = `../img/smallAvatar/${result.id}.jpg`;
+            else imgUser.src = `../img/smallAvatar/standard.jpg`;
             usernameUser.textContent = result.username;
           })
         }

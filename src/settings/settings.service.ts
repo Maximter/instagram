@@ -7,6 +7,7 @@ import * as bcrypt from 'bcrypt';
 import * as fs from 'fs';
 import * as uuid from 'uuid';
 import { Token } from 'entity/token.entity';
+import * as sharp from 'sharp'
 
 const saltForHash = 7;
 
@@ -161,6 +162,11 @@ export class SettingsService {
       `./public/img/avatar/${user.id}.jpg`,
       function (err) {
         if (err) console.log('ERROR: ' + err);
+        sharp( `./public/img/avatar/${user.id}.jpg`)
+        .resize(150)
+        .toFile( `./public/img/smallAvatar/${user.id}.jpg`, function(err) {
+          if(err) console.log(err);
+        });
       },
     );
   }

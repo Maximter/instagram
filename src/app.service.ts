@@ -74,6 +74,7 @@ export class AppService {
     let postLikes;    
 
     posts.forEach((element) => {
+      if (fs.existsSync(`./public/img/postedPic/${element.id_img}.gif`)) element['gif'] = true;
       id.push(element.id_img);
     });
 

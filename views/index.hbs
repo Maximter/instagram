@@ -33,7 +33,11 @@
                 <p class="owner-username">{{this.user.username}}</p>
               </a>
               <a href="/post/{{this.id_img}}">
+                {{#if this.gif}}
+                <img src="/img/postedPic/{{this.id_img}}.gif" class="post-pic" title="{{this.comment}}">
+                {{else}}
                 <img src="/img/mediumPostedPic/{{this.id_img}}.jpg" class="post-pic" title="{{this.comment}}">
+                {{/if}}
               </a>
               <div class="under-post">
                 <img src="../img/system/{{#if this.like}}liked{{else}}notification-empty{{/if}}.svg" title="Нравится" class="like" onclick="like(this, '{{this.id_img}}')">

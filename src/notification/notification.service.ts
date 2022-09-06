@@ -4,6 +4,7 @@ import { Follow } from 'entity/follower.entity';
 import { LikePost } from 'entity/like.entity';
 import { User_post } from 'entity/user_post.entity';
 import { getConnection, Repository } from 'typeorm';
+import * as fs from 'fs';
 
 @Injectable()
 export class NotificationService {
@@ -40,6 +41,10 @@ export class NotificationService {
       .orderBy('like_post.id', 'DESC')
       .take(14)
       .getMany();
+
+    likes.forEach((element) => {
+      if (fs.existsSync(`./public/img/postedPic/${element.post.id_img}.gif`)) element['gif'] = true;
+    })
 
     let follow = await getConnection()
       .getRepository(Follow)

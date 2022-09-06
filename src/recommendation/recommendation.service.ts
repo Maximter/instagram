@@ -4,6 +4,7 @@ import { LikePost } from 'entity/like.entity';
 import { User } from 'entity/user.entity';
 import { User_post } from 'entity/user_post.entity';
 import { getConnection, Repository } from 'typeorm';
+import * as fs from 'fs';
 
 @Injectable()
 export class RecommendationService {
@@ -36,7 +37,9 @@ export class RecommendationService {
           break;
         }
         if (countLikes.length - 1 == j) {
-          countLikes.push([allLikes[i].post.id_img, 1]);
+          let exist;
+          if (fs.existsSync(`./public/img/postedPic/${allLikes[i].post.id_img}.gif`)) exist = true;
+          countLikes.push([allLikes[i].post.id_img, 1, exist]);
           break;
         }
       }

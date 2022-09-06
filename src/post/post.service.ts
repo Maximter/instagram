@@ -31,12 +31,15 @@ export class PostService {
     if (comment != undefined) comment = comment.trim();
     else comment = '';
     const id = Math.floor(Math.random() * (99999999 - 1)) + 1;
+    let path = `./public/img/postedPic/${id}.jpg`
+    if (photo.mimetype = 'image/gif') path = `./public/img/postedPic/${id}.gif`
+    
     
     fs.rename(
-      `./public/img/rowImg/${photo.filename}`,
-      `./public/img/postedPic/${id}.jpg`,
+      `./public/img/rowImg/${photo.filename}`, path,
       function (err) {
         if (err) console.log('ERROR: ' + err);
+        if (photo.mimetype = 'image/gif') return;
         sharp( `./public/img/postedPic/${id}.jpg`)
           .resize(750)
           .toFile( `./public/img/smallPostedPic/${id}.jpg`, function(err) {
@@ -122,8 +125,12 @@ export class PostService {
     this.like_postRepository.remove(postLikes);
     this.user_postRepository.remove(post);
 
-    fs.unlink(`./public/img/postedPic/${post_id}.jpg`, (err) => {
-      if (err) throw err;
-    });
+    try {
+      fs.unlink(`./public/img/postedPic/${post_id}.jpg`, (err) => {});
+    } catch {
+      fs.unlink(`./public/img/postedPic/${post_id}.gif`, (err) => {
+        if (err) console.log(err);
+      });
+    }
   }
 }

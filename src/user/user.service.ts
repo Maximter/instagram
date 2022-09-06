@@ -4,6 +4,8 @@ import { Follow } from 'entity/follower.entity';
 import { User } from 'entity/user.entity';
 import { User_post } from 'entity/user_post.entity';
 import { getConnection, Repository } from 'typeorm';
+import * as fs from 'fs';
+
 
 @Injectable()
 export class UserService {
@@ -26,6 +28,10 @@ export class UserService {
       .where('user_post.user = :user', { user: user.id })
       .orderBy('date_post')
       .getMany();
+
+    posts.forEach((element) => {
+      if (fs.existsSync(`./public/img/postedPic/${element.id_img}.gif`)) element['gif'] = true;
+    })
 
     posts.reverse();
     return posts;
