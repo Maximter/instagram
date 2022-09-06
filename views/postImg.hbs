@@ -16,7 +16,7 @@
           <a href="/post"><img src="../img/system/add-empty.svg" alt="Добавить фотографию" title="Добавить фотографию"></a>
           <a href="/recommendation"><img src="../img/system/compass-empty.svg" alt="Рекомендуемое" title="Рекомендуемое"></a>
           <a href="/notification"><img src="../img/system/notification-empty.svg" alt="Уведомления" title="Уведомления"></a>
-          <a href="/user/{{user.username}}"><img src="../img/avatar/{{#if user.avatar}}{{user.id}}{{else}}standard{{/if}}.jpg" alt="{{user.name_lastname}}" title="{{user.name_lastname}}" class="user-avatar"></a>
+          <a href="/user/{{user.username}}"><img src="../img/smallAvatar/{{#if user.avatar}}{{user.id}}{{else}}standard{{/if}}.jpg" alt="{{user.name_lastname}}" title="{{user.name_lastname}}" class="user-avatar"></a>
         </div>
       </section>
     </header>
@@ -25,7 +25,7 @@
     <section class="main-section">
       <div class="photo-section">
         <a href="/user/{{post.user.username}}" class="owner-block">
-          <img src="../img/avatar/{{#if post.user.avatar}}{{post.user.id}}{{else}}standard{{/if}}.jpg" alt="{{post.user.name_lastname}}" title="{{post.user.name_lastname}}" class="owner-avatar">
+          <img src="../img/smallAvatar/{{#if post.user.avatar}}{{post.user.id}}{{else}}standard{{/if}}.jpg" alt="{{post.user.name_lastname}}" title="{{post.user.name_lastname}}" class="owner-avatar">
           <p class="owner-username">{{post.user.username}}</p>        
         </a>
         <img src="../img/postedPic/{{post.id_img}}.jpg" class="img">

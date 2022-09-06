@@ -5,6 +5,7 @@ import { User_post } from 'entity/user_post.entity';
 import e from 'express';
 import * as fs from 'fs';
 import { getConnection, Repository } from 'typeorm';
+import * as sharp from 'sharp'
 
 @Injectable()
 export class PostService {
@@ -30,14 +31,26 @@ export class PostService {
     if (comment != undefined) comment = comment.trim();
     else comment = '';
     const id = Math.floor(Math.random() * (99999999 - 1)) + 1;
-
+    
     fs.rename(
       `./public/img/rowImg/${photo.filename}`,
       `./public/img/postedPic/${id}.jpg`,
       function (err) {
         if (err) console.log('ERROR: ' + err);
+        sharp( `./public/img/postedPic/${id}.jpg`)
+          .resize(750)
+          .toFile( `./public/img/smallPostedPic/${id}.jpg`, function(err) {
+            if(err) console.log(err);
+          });
+
+        sharp( `./public/img/postedPic/${id}.jpg`)
+          .resize(1200)
+          .toFile( `./public/img/mediumPostedPic/${id}.jpg`, function(err) {
+            if(err) console.log(err);
+          });
       },
     );
+    
 
     const post: User_post = this.user_postRepository.create({
       id_img: id,

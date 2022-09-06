@@ -16,7 +16,7 @@
           <a href="/post"><img src="./img/system/add-empty.svg" alt="Добавить фотографию" title="Добавить фотографию"></a>
           <a href="/recommendation"><img src="./img/system/compass-empty.svg" alt="Рекомендуемое" title="Рекомендуемое"></a>
           <a href="/notification"><img src="./img/system/notification-empty.svg" alt="Уведомления" title="Уведомления"></a>
-          <a href="/user/{{user.username}}"><img src="./img/avatar/{{#if user.avatar}}{{user.id}}{{else}}standard{{/if}}.jpg" alt="{{user.name_lastname}}" title="{{user.name_lastname}}" class="user-avatar"></a>
+          <a href="/user/{{user.username}}"><img src="./img/smallAvatar/{{#if user.avatar}}{{user.id}}{{else}}standard{{/if}}.jpg" alt="{{user.name_lastname}}" title="{{user.name_lastname}}" class="user-avatar"></a>
         </div>
       </section>
     </header>
@@ -29,11 +29,11 @@
           {{#each posts}}
             <li>
               <a href="/user/{{this.user.username}}" class="owner-block">
-                <img src="../img/avatar/{{#if this.user.avatar}}{{this.user.id}}{{else}}standard{{/if}}.jpg" alt="{{this.user.name_lastname}}" title="{{this.user.name_lastname}}" class="owner-avatar">
+                <img src="../img/smallAvatar/{{#if this.user.avatar}}{{this.user.id}}{{else}}standard{{/if}}.jpg" alt="{{this.user.name_lastname}}" title="{{this.user.name_lastname}}" class="owner-avatar">
                 <p class="owner-username">{{this.user.username}}</p>
               </a>
               <a href="/post/{{this.id_img}}">
-                <img src="/img/postedPic/{{this.id_img}}.jpg" class="post-pic" title="{{this.comment}}">
+                <img src="/img/mediumPostedPic/{{this.id_img}}.jpg" class="post-pic" title="{{this.comment}}">
               </a>
               <div class="under-post">
                 <img src="../img/system/{{#if this.like}}liked{{else}}notification-empty{{/if}}.svg" title="Нравится" class="like" onclick="like(this, '{{this.id_img}}')">

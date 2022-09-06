@@ -16,7 +16,7 @@
           <a href="/post"><img src="../img/system/add-empty.svg" alt="Добавить фотографию" title="Добавить фотографию"></a>
           <a href="/recommendation"><img src="../img/system/compass-empty.svg" alt="Рекомендуемое" title="Рекомендуемое"></a>
           <a href="/notification"><img src="../img/system/notification-empty.svg" alt="Уведомления" title="Уведомления"></a>
-          <a href="/user/{{user.username}}"><img src="../img/avatar/{{#if user.avatar}}{{user.id}}{{else}}standard{{/if}}.jpg" alt="{{user.name_lastname}}" title="{{user.name_lastname}}" class="user-avatar"></a>
+          <a href="/user/{{user.username}}"><img src="../img/smallAvatar/{{#if user.avatar}}{{user.id}}{{else}}standard{{/if}}.jpg" alt="{{user.name_lastname}}" title="{{user.name_lastname}}" class="user-avatar"></a>
         </div>
       </section>
     </header>
@@ -26,7 +26,7 @@
       <ul class="chats" id="outputChats">
         {{#each chats}}
           <li class="chat" id_chat="{{this.id_chat}}" username="{{this.interlocutor.username}}" id="chat" online="{{this.interlocutor.online}}" lastMessage="{{#if this.sender}}Вы: {{/if}}{{this.info.last_message_content}}">
-               <img src="./../img/avatar/{{#if this.interlocutor.avatar}}{{this.interlocutor.id}}{{else}}standard{{/if}}.jpg" id_chat="{{this.id_chat}}" alt="{{this.interlocutor.name_lastname}}" title="{{this.interlocutor.name_lastname}}" class="chatAvatarImg">
+               <img src="./../img/smallAvatar/{{#if this.interlocutor.avatar}}{{this.interlocutor.id}}{{else}}standard{{/if}}.jpg" id_chat="{{this.id_chat}}" alt="{{this.interlocutor.name_lastname}}" title="{{this.interlocutor.name_lastname}}" class="chatAvatarImg">
               <div class="onlinePoint" id="onlinePoint" id_chat="{{this.id_chat}}" style="display:none"></div>
               <div>
                   <p id="chatName" id_chat="{{this.id_chat}}" class="lastSenderText">{{this.interlocutor.name_lastname}}</p>
@@ -52,7 +52,7 @@
               </div>
 
               <a href="/user/{{interlocutor.username}}" id="imgHref">
-                <img src="./../img/avatar/{{#if interlocutor.avatar}}{{interlocutor.id}}{{else}}standard{{/if}}.jpg" class="chatInfoImg" id="chatInfoImg" title="{{interlocutor.username}}" style="{{#if interlocutor}} {{else}}display: none;{{/if}}">
+                <img src="./../img/smallAvatar/{{#if interlocutor.avatar}}{{interlocutor.id}}{{else}}standard{{/if}}.jpg" class="chatInfoImg" id="chatInfoImg" title="{{interlocutor.username}}" style="{{#if interlocutor}} {{else}}display: none;{{/if}}">
               </a>
           </div>
 
