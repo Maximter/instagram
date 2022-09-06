@@ -36,8 +36,7 @@ export class NotificationService {
       .createQueryBuilder('like_post')
       .leftJoinAndSelect('like_post.post', 'post')
       .leftJoinAndSelect('like_post.user', 'user')
-      .where('like_post.post IN (:...id)', { id: id_img })
-      .where('like_post.user != :id', { id: user.id })
+      .where('like_post.post IN (:...id) and like_post.user != :id_user', { id: id_img, id_user: user.id })
       .orderBy('like_post.id', 'DESC')
       .take(14)
       .getMany();

@@ -23,9 +23,9 @@
     
   <!-- ЧАТЫ -->
   <section class="main-section">
-      <ul class="chats">
+      <ul class="chats" id="outputChats">
         {{#each chats}}
-          <li class="chat" id_chat="{{this.id_chat}}" id="chat" online="{{this.interlocutor.online}}" lastMessage="{{#if this.sender}}Вы: {{/if}}{{this.info.last_message_content}}">
+          <li class="chat" id_chat="{{this.id_chat}}" username="{{this.interlocutor.username}}" id="chat" online="{{this.interlocutor.online}}" lastMessage="{{#if this.sender}}Вы: {{/if}}{{this.info.last_message_content}}">
                <img src="./../img/avatar/{{#if this.interlocutor.avatar}}{{this.interlocutor.id}}{{else}}standard{{/if}}.jpg" id_chat="{{this.id_chat}}" alt="{{this.interlocutor.name_lastname}}" title="{{this.interlocutor.name_lastname}}" class="chatAvatarImg">
               <div class="onlinePoint" id="onlinePoint" id_chat="{{this.id_chat}}" style="display:none"></div>
               <div>
@@ -34,7 +34,7 @@
               </div>
               <div>
                   <p id="time_last_message" class="time_last_message">{{this.info.last_message_time}}</p>
-                  <div id="read" class="{{#if this.unread}}{{else}}bluePoint{{/if}}">{{this.unread}}</div>
+                  <div id="read" class="{{#if this.unreadBool}}unread{{else}}{{#if interlocutorNotRead}}blueUnread{{/if}}{{/if}}">{{#if interlocutorNotRead}}{{else}}{{this.unread}}{{/if}}</div>
               </div>                             
           </li>
         {{/each}}
@@ -43,7 +43,7 @@
       <div class="chatBox">
           <div class="chatInfo" id="chatInfo">
               <div class="chatInfoBlock">
-                  <a href="/user/{{interlocutor.username}}"><p class="chatInfoName" id="chatInfoName">{{interlocutor.name_lastname}}</p></a>
+                  <a href="/user/{{interlocutor.username}}" id="nameHref"><p class="chatInfoName" id="chatInfoName">{{interlocutor.name_lastname}}</p></a>
                   <div >
                       <div id="typing"></div>
                       <div class="onlineBlock"></div>
@@ -51,7 +51,7 @@
                   </div>
               </div>
 
-              <a href="/user/{{interlocutor.username}}">
+              <a href="/user/{{interlocutor.username}}" id="imgHref">
                 <img src="./../img/avatar/{{#if interlocutor.avatar}}{{interlocutor.id}}{{else}}standard{{/if}}.jpg" class="chatInfoImg" id="chatInfoImg" title="{{interlocutor.username}}" style="{{#if interlocutor}} {{else}}display: none;{{/if}}">
               </a>
           </div>
@@ -61,7 +61,7 @@
                 {{#each messages}}
                   <li class="message {{#if im-sender}}own{{else}}interlocutor{{/if}}">
                       <p>{{this.content}}</p>
-                      <date style="font-size:12px">{{this.sent_date}}</date>
+                      <date style="font-size:12px; color: #000">{{this.sent_date}}</date>
                   </li>
                 {{/each}}
               </ul>

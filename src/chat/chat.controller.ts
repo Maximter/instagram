@@ -36,11 +36,24 @@ export class ChatController {
     res.json(messages);
   }
 
+  @Get('read')
+  async read(@Req() req: Request, @Res() res: Response) {
+    const user = await this.appService.getUser(req);
+    this.chatService.readMessage(req.query.id_chat, user.id);
+  }
+
+  @Get('unread')
+  async unread(@Req() req: Request, @Res() res: Response) {
+    const user = await this.appService.getUser(req);
+    this.chatService.unreadMessage(req.query.id_chat, user.id);
+  }
+
   @Get('/:username')
   async renderChat(@Req() req: Request, @Res() res: Response) {    
     const user = await this.appService.getUser(req);
     const chats = await this.chatService.getChats(user);    
     const interlocutor = await this.chatService.getInterlocutor(req.params.username);
+    if (!interlocutor) return;  
     const messages = await this.chatService.getMessages(user, interlocutor);    
     return res.render('chat', { user: user, chats : chats,  interlocutor : interlocutor, messages : messages });
   }

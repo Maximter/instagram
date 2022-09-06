@@ -62,53 +62,49 @@ export class SocketService {
     await this.messageRepository.save(savedMessage);
   }
 
-  // async getInterlocutorsToken(client, id_chat): Promise<string[]> {
-  //   const my_token = await SocketService.getToken(client);
-  //   const my_tokenEntity = await getConnection()
-  //     .getRepository(Token)
-  //     .createQueryBuilder('token')
-  //     .leftJoinAndSelect('token.user', 'user')
-  //     .where('token.token = :token', { token: my_token })
-  //     .getOne();
+  async getInterlocutorsToken(client, id_chat): Promise<string[]> {
+    const my_token = await SocketService.getToken(client);
+    const my_tokenEntity = await getConnection()
+      .getRepository(Token)
+      .createQueryBuilder('token')
+      .leftJoinAndSelect('token.user', 'user')
+      .where('token.token = :token', { token: my_token })
+      .getOne();
 
-  //   const user = my_tokenEntity.user;
+    const user = my_tokenEntity.user;
 
-  //   const members = await getConnection()
-  //     .getRepository(Chat)
-  //     .createQueryBuilder('chat')
-  //     .leftJoinAndSelect('chat.member', 'member')
-  //     .where('chat.chat_id = :id', { id: id_chat })
-  //     .getMany();
+    const members = await getConnection()
+      .getRepository(Chat)
+      .createQueryBuilder('chat')
+      .leftJoinAndSelect('chat.member', 'member')
+      .where('chat.id_chat = :id', { id: id_chat })
+      .getMany();
 
-  //   let interlocutor;
+    let interlocutor;
 
-  //   for (let i = 0; i < members.length; i++) {
-  //     if (members[i].member.id_user != user.id_user) {
-  //       interlocutor = members[i].member;
-  //       break;
-  //     }
-  //   }
-  //   const interlocutor_token = await this.tokenRepository.findOne({
-  //     where: { user: interlocutor },
-  //   });
+    for (let i = 0; i < members.length; i++) {
+      if (members[i].member.id != user.id) {
+        interlocutor = members[i].member;
+        break;
+      }
+    }
+    const interlocutor_token = await this.tokenRepository.findOne({
+      where: { user: interlocutor },
+    });
+    
+    return online[`${interlocutor_token.token}`];
+  }
 
-  //   return online[`${interlocutor_token.token}`];
-  // }
+  async getInterlocutorsInfo(id, message): Promise<object> {
+    const interlocutor = await this.userRepository.findOne({
+      where: { id: id },
+    });
 
-  // async getInterlocutorsInfo(id, message): Promise<object> {
-  //   const interlocutor = await this.userRepository.findOne({
-  //     where: { id_user: id },
-  //   });
+    interlocutor['sender'] = true;
+    interlocutor['message'] = message;
 
-  //   if (fs.existsSync(`./public/img/avatar/${interlocutor.id_user}.jpg`)) {
-  //     interlocutor['avatar'] = `img/avatar/${interlocutor.id_user}.jpg`;
-  //   } else interlocutor['avatar'] = `img/avatar/standard.jpg`;
-
-  //   interlocutor['sender'] = true;
-  //   interlocutor['message'] = message;
-
-  //   return interlocutor;
-  // }
+    return interlocutor;
+  }
 
   async createChat(client, payload) {
     const message = payload[0].trim();
@@ -166,12 +162,12 @@ export class SocketService {
     return { id_chat: chat_id, exist: false };
   }
 
-  // async getUserTokens(client): Promise<string[]> {
-  //   const my_token = await SocketService.getToken(client);
+  async getUserTokens(client): Promise<string[]> {
+    const my_token = await SocketService.getToken(client);
 
-  //   if (online[`${my_token}`] != undefined) return online[`${my_token}`];
-  //   else return [];
-  // }
+    if (online[`${my_token}`] != undefined) return online[`${my_token}`];
+    else return [];
+  }
 
   async checkExistchat(user, interlocutor): Promise<string> {
     const userChats = [];
@@ -283,24 +279,21 @@ export class SocketService {
   //   return info;
   // }
 
-  // async getUserInfo(client, payload) {
-  //   const token = await SocketService.getToken(client);
-  //   const tokenEntity = await getConnection()
-  //     .getRepository(Token)
-  //     .createQueryBuilder('token')
-  //     .leftJoinAndSelect('token.user', 'user')
-  //     .where('token.token = :token', { token: token })
-  //     .getOne();
+  async getUserInfo(client, payload) {
+    const token = await SocketService.getToken(client);
+    const tokenEntity = await getConnection()
+      .getRepository(Token)
+      .createQueryBuilder('token')
+      .leftJoinAndSelect('token.user', 'user')
+      .where('token.token = :token', { token: token })
+      .getOne();
 
-  //   const user = tokenEntity.user;
-  //   user['message'] = payload[0];
-  //   user['sender'] = false;
-  //   if (fs.existsSync(`./public/img/avatar/${user.id_user}.jpg`)) {
-  //     user['avatar'] = `img/avatar/${user.id_user}.jpg`;
-  //   } else user['avatar'] = `img/avatar/standard.jpg`;
-
-  //   return user;
-  // }
+    const user = tokenEntity.user;
+    user['message'] = payload[0];
+    user['sender'] = false;
+    
+    return user;
+  }
 
   static getToken(client): string {
     let cookies = client.handshake.headers.cookie;

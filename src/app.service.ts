@@ -71,7 +71,7 @@ export class AppService {
     if (posts.length == 0) return;
     const id = [];
     let userLikes;
-    let postLikes;
+    let postLikes;    
 
     posts.forEach((element) => {
       id.push(element.id_img);
