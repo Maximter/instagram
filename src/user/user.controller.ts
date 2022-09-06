@@ -19,6 +19,9 @@ export class UserController {
   async renderUserPage(@Req() req: Request, @Res() res: Response) {
     const user = await this.appService.getUser(req);
     const owner = await this.userService.getOwner(req.params.username);
+    if (!owner) {
+      return res.render('404');
+    }
     if (user.id == owner.id) user['owner'] = true;
     else {
       const follow = await this.userService.isFollow(user, owner);
