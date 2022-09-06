@@ -4,6 +4,7 @@ import { User } from 'entity/user.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { Token } from 'entity/token.entity';
+import { VerificationService } from 'src/verification/verification.service';
 
 @Injectable()
 export class LoginService {
@@ -13,6 +14,8 @@ export class LoginService {
 
     @InjectRepository(Token)
     private tokenRepository: Repository<Token>,
+
+    private readonly verificationService: VerificationService,
   ) {}
 
   async validUser(req, body): Promise<object> {
@@ -33,8 +36,8 @@ export class LoginService {
 
     if (user != undefined && (await bcrypt.compare(password, user.password))) {
       if (user.verificated) return { valid: true };
-      else {
-        // TODO Отправить письмо
+      else { 
+        this.verificationService.sendMessage(req, body);
         return {
           valid: false,
           warn: 'Ваш эл. адрес не был подтверждён. Для получения доступа к сервису перейдите по ссылке из отправленного письма',

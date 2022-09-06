@@ -14,7 +14,7 @@ export class AppController {
     const postsInfo = await this.appService.getPosts(user);
     const posts = await this.appService.getLikes(user, postsInfo);
     let recommendation;
-    if (posts.length == 0) {
+    if (posts == undefined) {
       const countLikes = await this.recommendstionService.getPopularPosts();
       const popularPostsInfo = await this.recommendstionService.getPopularPostsFullData(countLikes);
       recommendation = await this.appService.getLikes(user, popularPostsInfo);

@@ -34,7 +34,6 @@ export class LoginController {
           user: validUser['user'],
         });
       else {
-        this.verificationService.sendMessage(req, body);
         return res.render('login', {
           warn: validUser['warn'],
           user: validUser['user'],

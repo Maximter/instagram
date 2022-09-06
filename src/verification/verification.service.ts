@@ -22,7 +22,7 @@ export class VerificationService {
       'utf8',
     );
     const template = handlebars.compile(emailTemplateSource);
-    let user;
+    let user;  
 
     if (body.email != undefined) {
       user = await this.userRepository.findOne({
@@ -32,8 +32,14 @@ export class VerificationService {
       user = await this.userRepository.findOne({
         where: { username: body.username.trim() },
       });
-    }
 
+      if (user == undefined) {
+        user = await this.userRepository.findOne({
+          where: { email: body.username },
+        });
+      }     
+    }
+    
     if (user == undefined) return;
 
     const link = `http://${req.get('host')}/verification?id=${user.id}&email=${
@@ -47,7 +53,10 @@ export class VerificationService {
         subject: 'Верификация в Instyle',
         html: htmlToSend,
       })
-      .then(() => {})
+      .then(() => {
+        console.log('sent');
+        
+      })
       .catch((err) => {
         console.log(err);
       });

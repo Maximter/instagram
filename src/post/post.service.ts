@@ -18,11 +18,11 @@ export class PostService {
 
   async checkValidData(photo, comment): Promise<object> {
     if (photo == undefined)
-      return { valid: false, err: 'Фотография не была загружена' };
+      return { valid: false, err: 'Файл не был загружен' };
     if (photo.size > 62914560)
       return { valid: false, err: 'Слишком большой размер файла' };
     if (comment.length > 1500)
-      return { valid: false, err: 'Слишком длинное описание фотографии' };
+      return { valid: false, err: 'Слишком длинное описание файла' };
     return { valid: true, err: '' };
   }
 
