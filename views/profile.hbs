@@ -24,6 +24,7 @@
     <section class="profile-section">
       <div class="avatar-main-block">
         <img src="./../img/avatar/{{#if owner.avatar}}{{owner.id}}{{else}}standard{{/if}}.jpg" alt="{{owner.name_lastname}}" title="{{owner.name_lastname}}" class="user-avatar-main">
+        <div {{#if owner.onlineBool}}class="onlinePoint"{{/if}}></div>
       </div>
       <div class="info-block">
         <div class="username-block"> 

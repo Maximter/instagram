@@ -31,6 +31,7 @@ export class UserController {
     owner['followings'] = follows['following'];
     owner['countFollowers'] = follows['follower'].length;
     owner['countFollowings'] = follows['following'].length;
+    if (owner['online'] == '0') owner['onlineBool'] = true;    
 
     return res.render('profile', { user: user, post: posts, owner: owner });
   }
