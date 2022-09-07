@@ -31,8 +31,8 @@ export class PostService {
     if (comment != undefined) comment = comment.trim();
     else comment = '';
     const id = Math.floor(Math.random() * (99999999 - 1)) + 1;
-    let path = `./public/img/postedPic/${id}.jpg`
-    if (photo.mimetype = 'image/gif') path = `./public/img/postedPic/${id}.gif`
+    let path = `./public/img/post/postedPic/${id}.jpg`
+    if (photo.mimetype = 'image/gif') path = `./public/img/post/postedGif/${id}.gif`
     
     
     fs.rename(
@@ -40,15 +40,15 @@ export class PostService {
       function (err) {
         if (err) console.log('ERROR: ' + err);
         if (photo.mimetype = 'image/gif') return;
-        sharp( `./public/img/postedPic/${id}.jpg`)
+        sharp( `./public/img/post/postedPic/${id}.jpg`)
           .resize(750)
-          .toFile( `./public/img/smallPostedPic/${id}.jpg`, function(err) {
+          .toFile( `./public/img/post/smallPostedPic/${id}.jpg`, function(err) {
             if(err) console.log(err);
           });
 
-        sharp( `./public/img/postedPic/${id}.jpg`)
+        sharp( `./public/img/post/postedPic/${id}.jpg`)
           .resize(1200)
-          .toFile( `./public/img/mediumPostedPic/${id}.jpg`, function(err) {
+          .toFile( `./public/img/post/mediumPostedPic/${id}.jpg`, function(err) {
             if(err) console.log(err);
           });
       },
@@ -126,11 +126,11 @@ export class PostService {
     this.user_postRepository.remove(post);
 
     try {
-      fs.unlink(`./public/img/postedPic/${post_id}.jpg`, (err) => {});
+      fs.unlink(`./public/img/post/postedPic/${post_id}.jpg`, (err) => {});
+      fs.unlink(`./public/img/post/smallPostedPic/${post_id}.jpg`, (err) => {});
+      fs.unlink(`./public/img/post/mediumuPostedPic/${post_id}.jpg`, (err) => {});
     } catch {
-      fs.unlink(`./public/img/postedPic/${post_id}.gif`, (err) => {
-        if (err) console.log(err);
-      });
+      fs.unlink(`./public/img/post/postedGif/${post_id}.gif`, (err) => {});
     }
   }
 }

@@ -38,7 +38,7 @@ export class RecommendationService {
         }
         if (countLikes.length - 1 == j) {
           let exist;
-          if (fs.existsSync(`./public/img/postedPic/${allLikes[i].post.id_img}.gif`)) exist = true;
+          if (fs.existsSync(`./public/img/post/postedGif/${allLikes[i].post.id_img}.gif`)) exist = true;
           countLikes.push([allLikes[i].post.id_img, 1, exist]);
           break;
         }

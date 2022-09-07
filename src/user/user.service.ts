@@ -30,7 +30,7 @@ export class UserService {
       .getMany();
 
     posts.forEach((element) => {
-      if (fs.existsSync(`./public/img/postedPic/${element.id_img}.gif`)) element['gif'] = true;
+      if (fs.existsSync(`./public/img/post/postedGif/${element.id_img}.gif`)) element['gif'] = true;
     })
 
     posts.reverse();
