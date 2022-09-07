@@ -14,7 +14,7 @@ import { PostService } from './post.service';
 
 const imageFilter = function(req, file, cb) {
   // Accept images only
-  if (!file.originalname.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF)$/)) {
+  if (!file.originalname.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF|mp4)$/)) {
       req.fileValidationError = 'Only image files are allowed!';      
       return cb(null, false);
   }
@@ -56,7 +56,7 @@ export class PostController {
 
   @Post()
   @UseInterceptors(FileInterceptor('photo', { dest: 'public/img/rowImg', 
-    limits : { fileSize: 1024 * 1024 * 50, files: 1, }, 
+    limits : { files: 1, }, 
     fileFilter : imageFilter, }))
   async downloadPic(
     @Req() req: Request,
@@ -75,10 +75,10 @@ export class PostController {
         err: validData['err'],
       });
 
-    this.postService.savePicture(file, req.body.comment, user);
+    this.postService.savePost(file, req.body.comment, user);
     return res.render('post', {
       user: user,
-      success: 'Фотография будет загружена через несколько секунд',
+      success: 'Пост будет опубликован через несколько секунд',
     });
   }
 

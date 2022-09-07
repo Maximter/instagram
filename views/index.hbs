@@ -36,7 +36,13 @@
                 {{#if this.gif}}
                 <img src="/img/post/postedGif/{{this.id_img}}.gif" class="post-pic" title="{{this.comment}}">
                 {{else}}
+                  {{#if this.mp4}}
+                  <video class="post-pic" controls="controls">
+                    <source src="/img/post/postedVid/{{this.id_img}}.mp4" type='video/mp4;'>
+                  </video>
+                  {{else}}
                 <img src="/img/post/mediumPostedPic/{{this.id_img}}.jpg" class="post-pic" title="{{this.comment}}">
+                {{/if}}
                 {{/if}}
               </a>
               <div class="under-post">
@@ -114,7 +120,8 @@
       }
 
       function copy (link) {
-        navigator.clipboard.writeText(window.location.host + link)
+        console.log(navigator.clipboard)
+        navigator.clipboard.writeText(`${window.location.origin}${link}`)
           .then(() => {
              Swal.fire({
               position: 'top',

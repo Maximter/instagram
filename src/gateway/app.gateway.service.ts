@@ -92,6 +92,7 @@ export class SocketService {
       where: { user: interlocutor },
     });
     
+    if (interlocutor_token == undefined) return undefined;
     return online[`${interlocutor_token.token}`];
   }
 

@@ -33,15 +33,27 @@
               <p><a href="/user/{{this.follower.username}}"><span>{{this.follower.username}}</span></a> подписался(ась) на Вас</p>
               {{else}}
               <a href="/user/{{this.user.username}}"><img src="../img/smallAvatar/{{#if this.user.avatar}}{{this.user.id}}{{else}}standard{{/if}}.jpg" alt="{{this.user.name_lastname}}" title="{{this.user.name_lastname}}" class="notif-avatar"></a>
-              {{#if this.gif}}
-              <p><a href="/user/{{this.user.username}}"><span>{{this.user.username}}</span></a> понравилась Ваша GIF:</p>
+
+                {{#if this.gif}}
+                <p><a href="/user/{{this.user.username}}"><span>{{this.user.username}}</span></a> понравилась Ваша GIF:</p>
               <a href="/post/{{this.post.id_img}}">
                 <img src="/img/post/postedGif/{{this.post.id_img}}.gif" class="notif-post" title="{{this.post.comment}}">
                 {{else}}
+                  {{#if this.mp4}}
+                    <p><a href="/user/{{this.user.username}}"><span>{{this.user.username}}</span></a> понравилась Ваше видео:</p>
+                      <a href="/post/{{this.post.id_img}}">
+                  <video class="notif-post" style="object-fit: contain;">
+                    <source src="/img/post/postedVid/{{this.post.id_img}}.mp4" type='video/mp4;'>
+                  </video>
+                  {{else}}
                 <p><a href="/user/{{this.user.username}}"><span>{{this.user.username}}</span></a> понравилась Ваша фотография:</p>
               <a href="/post/{{this.post.id_img}}">
                 <img src="/img/post/smallPostedPic/{{this.post.id_img}}.jpg" class="notif-post" title="{{this.post.comment}}">
                 {{/if}}
+                {{/if}}
+
+
+
               </a>
             {{/if}}
           </li>  

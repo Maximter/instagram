@@ -37,9 +37,10 @@ export class RecommendationService {
           break;
         }
         if (countLikes.length - 1 == j) {
-          let exist;
-          if (fs.existsSync(`./public/img/post/postedGif/${allLikes[i].post.id_img}.gif`)) exist = true;
-          countLikes.push([allLikes[i].post.id_img, 1, exist]);
+          let existGif ,existVid;
+          if (fs.existsSync(`./public/img/post/postedGif/${allLikes[i].post.id_img}.gif`)) existGif = true;
+          else if (fs.existsSync(`./public/img/post/postedVid/${allLikes[i].post.id_img}.mp4`)) existVid = true;
+          countLikes.push([allLikes[i].post.id_img, 1, existGif, existVid]);
           break;
         }
       }

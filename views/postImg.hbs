@@ -28,10 +28,17 @@
           <img src="../img/smallAvatar/{{#if post.user.avatar}}{{post.user.id}}{{else}}standard{{/if}}.jpg" alt="{{post.user.name_lastname}}" title="{{post.user.name_lastname}}" class="owner-avatar">
           <p class="owner-username">{{post.user.username}}</p>        
         </a>
+
         {{#if post.gif}}
         <img src="/img/post/postedGif/{{post.id_img}}.gif" class="post-pic" title="{{post.comment}}">
         {{else}}
-        <img src="/img/post/postedPic/{{post.id_img}}.jpg" class="post-pic" title="{{post.comment}}">
+          {{#if post.mp4}}
+          <video class="post-pic" controls="controls">
+            <source src="/img/post/postedVid/{{post.id_img}}.mp4" type='video/mp4;'>
+          </video>
+          {{else}}
+          <img src="/img/post/postedPic/{{post.id_img}}.jpg" class="post-pic" title="{{post.comment}}">
+        {{/if}}
         {{/if}}
       </div>
 

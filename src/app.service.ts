@@ -75,6 +75,7 @@ export class AppService {
 
     posts.forEach((element) => {
       if (fs.existsSync(`./public/img/post/postedGif/${element.id_img}.gif`)) element['gif'] = true;
+      else if (fs.existsSync(`./public/img/post/postedVid/${element.id_img}.mp4`)) element['mp4'] = true;
       id.push(element.id_img);
     });
 

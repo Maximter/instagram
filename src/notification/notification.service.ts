@@ -44,6 +44,7 @@ export class NotificationService {
 
     likes.forEach((element) => {
       if (fs.existsSync(`./public/img/post/postedGif/${element.post.id_img}.gif`)) element['gif'] = true;
+      else if (fs.existsSync(`./public/img/post/postedVid/${element.post.id_img}.mp4`)) element['mp4'] = true;
     })
 
     let follow = await getConnection()

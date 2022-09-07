@@ -63,10 +63,18 @@
          {{#each post}}
           <li>
             <a href="/post/{{this.id_img}}">
+
+
                 {{#if this.gif}}
-                <img src="/img/post/postedGif/{{this.id_img}}.gif" class="post-pic" title="{{this.comment}}">
+                 <img src="/img/post/postedGif/{{this.id_img}}.gif" class="post-pic" title="{{this.comment}}">
                 {{else}}
+                  {{#if this.mp4}}
+                  <video class="post-pic" style="object-fit: cover;">
+                    <source src="/img/post/postedVid/{{this.id_img}}.mp4" type='video/mp4;'>
+                  </video>
+                  {{else}}
                 <img src="/img/post/smallPostedPic/{{this.id_img}}.jpg" class="post-pic" title="{{this.comment}}">
+                {{/if}}
                 {{/if}}
             </a>
           </li>

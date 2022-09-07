@@ -17,29 +17,29 @@ export class PostService {
     private like_postRepository: Repository<LikePost>,
   ) {}
 
-  async checkValidData(photo, comment): Promise<object> {
+  async checkValidData(photo, comment): Promise<object> {    
     if (photo == undefined)
       return { valid: false, err: 'Файл не был загружен' };
-    if (photo.size > 62914560)
+    if (photo.size > 1024 * 1024 * 75)
       return { valid: false, err: 'Слишком большой размер файла' };
     if (comment.length > 1500)
       return { valid: false, err: 'Слишком длинное описание файла' };
     return { valid: true, err: '' };
   }
 
-  async savePicture(photo, comment, user): Promise<void> {
+  async savePost(photo, comment, user): Promise<void> {
     if (comment != undefined) comment = comment.trim();
     else comment = '';
     const id = Math.floor(Math.random() * (99999999 - 1)) + 1;
     let path = `./public/img/post/postedPic/${id}.jpg`
-    if (photo.mimetype = 'image/gif') path = `./public/img/post/postedGif/${id}.gif`
-    
+    if (photo.mimetype == 'image/gif') path = `./public/img/post/postedGif/${id}.gif`
+    else if (photo.mimetype == 'video/mp4') path = `./public/img/post/postedVid/${id}.mp4`
     
     fs.rename(
       `./public/img/rowImg/${photo.filename}`, path,
       function (err) {
         if (err) console.log('ERROR: ' + err);
-        if (photo.mimetype = 'image/gif') return;
+        if (photo.mimetype != 'image/jpg') return;
         sharp( `./public/img/post/postedPic/${id}.jpg`)
           .resize(750)
           .toFile( `./public/img/post/smallPostedPic/${id}.jpg`, function(err) {
@@ -131,6 +131,7 @@ export class PostService {
       fs.unlink(`./public/img/post/mediumuPostedPic/${post_id}.jpg`, (err) => {});
     } catch {
       fs.unlink(`./public/img/post/postedGif/${post_id}.gif`, (err) => {});
+      fs.unlink(`./public/img/post/postedVid/${post_id}.mp4`, (err) => {});
     }
   }
 }
