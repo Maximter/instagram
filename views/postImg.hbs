@@ -43,7 +43,7 @@
           {{/if}}
 
            <p class="comment-text"><span style="font-weight: 500;" id="likes_{{post.id_img}}" likes="{{post.countLikes}}" >Отметок нравится: {{post.countLikes}}</span></p>
-          {{#if this.comment}}<p class="comment-text"><a href="/user/{{this.user.username}}"><span style="font-weight: 500;">{{post.user.username}}:</span></a> {{post.comment}}</p>{{/if}}
+          {{#if post.comment}}<p class="comment-text"><a href="/user/{{this.user.username}}"><span style="font-weight: 500;">{{post.user.username}}:</span></a> {{post.comment}}</p>{{/if}}
         </div>
     </section>
 
