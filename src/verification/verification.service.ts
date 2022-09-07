@@ -4,14 +4,18 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'entity/user.entity';
-import { Repository } from 'typeorm';
+import { getConnection, Repository } from 'typeorm';
 import { MailerService } from '@nestjs-modules/mailer';
+import { Token } from 'entity/token.entity';
 
 @Injectable()
 export class VerificationService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
+
+    @InjectRepository(Token)
+    private tokenRepository: Repository<Token>,
 
     private readonly mailerService: MailerService,
   ) {}
@@ -42,9 +46,14 @@ export class VerificationService {
     
     if (user == undefined) return;
 
-    const link = `http://${req.get('host')}/verification?id=${user.id}&email=${
-      user.email
-    }`;
+    const tokenEntity = await getConnection()
+      .getRepository(Token)
+      .createQueryBuilder('token')
+      .leftJoinAndSelect('token.user', 'user')
+      .where('token.user = :id', { id: user.id })
+      .getOne();
+
+    const link = `http://${req.get('host')}/verification?t=${tokenEntity.token}`;
     const htmlToSend = template({ link: link });
 
     this.mailerService
@@ -69,11 +78,16 @@ export class VerificationService {
     );
     const template = handlebars.compile(emailTemplateSource);
 
+    const tokenEntity = await getConnection()
+      .getRepository(Token)
+      .createQueryBuilder('token')
+      .leftJoinAndSelect('token.user', 'user')
+      .where('token.user = :id', { id: user.id })
+      .getOne();
+
     const confirmLink = `http://${req.get(
       'host',
-    )}/verification/confirm-email?id=${user.id}&pass=${
-      user.password
-    }&email=${email}`;
+    )}/verification/confirm-email?t=${tokenEntity.token}&email=${email}`;
     const settingsLink = `http://${req.get('host')}/settings`;
     const htmlToSend = template({
       confirmLink: confirmLink,

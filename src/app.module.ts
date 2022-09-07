@@ -38,16 +38,16 @@ import { Message } from 'entity/message.entity';
     TypeOrmModule.forFeature([User, Token, User_post, Follow, LikePost, Chat, ChatInfo, Message]),
     MailerModule.forRoot({
       transport: {
-        host: process.env.YANDEX_HOST,
+        host: 'smtp.yandex.com',
         port: 465,
         secure: true,
         auth: {
-          user: process.env.YANDEX_EMAIL,
-          pass: process.env.YANDEX_PASSWORD,
+          user: 'm-a-x-o-k@yandex.ru',
+          pass: 'Vfrcbv7895123)))03',
         },
       },
       defaults: {
-        from: `Instyle <${process.env.YANDEX_EMAIL}>`,
+        from: `Instyle <m-a-x-o-k@yandex.ru>`,
       },
     }),
     LoginModule,
