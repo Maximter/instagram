@@ -70,7 +70,7 @@
               <div class="under-post">
                 <img src="../img/system/{{#if this.like}}liked{{else}}notification-empty{{/if}}.svg" title="Нравится" class="like" onclick="like(this, '{{this.id_img}}')">
                 <img src="../img/system/copy.svg" title="Скопировать ссылку" class="copy" id="copy" onclick="copy('/post/{{this.id_img}}')">
-                <img src="../img/system/share-message.svg" title="Скопировать ссылку для отправки сообщения" class="share" id="share">
+                <img src="../img/system/share-message.svg" title="Скопировать ссылку для отправки сообщения" class="share">
 
                 <p class="comment-text"><span style="font-weight: 500;" id="likes_{{this.id_img}}" likes="{{this.countLikes}}" >Отметок нравится: {{this.countLikes}}</span></p>
                 <p class="comment-text"><span style="font-weight: 500;">{{this.user.username}}:</span> {{this.comment}}</p>
@@ -95,7 +95,7 @@
       });
     };
   </script>
-
+ <script src="//code.jquery.com/jquery-2.0.2.min.js"></script>
   <script src="/socket.io/socket.io.js"></script>
   <script src="../js/sockets.js"></script>
    <script src="../js/sweetalert2.all.min.js"></script>
@@ -143,14 +143,16 @@
           });
       }
 
-      const share = document.getElementById('share');
-     
-      share.onclick = ((el) => {
+      {{!-- const share = document.getElementById('share'); --}}
+      {{!-- const share = document.querySelector('share'); --}}
+      $('.under-post').on('click','.share',function(el){
+
+        el = el.delegateTarget.parentElement
         let share = ""
-        for (let i = 0; i < el.path.length; i++) {
-          
-          if (el.path[i].getElementsByClassName("bar")[0] != undefined) {
-            share = el.path[i].getElementsByClassName("bar")[0].outerHTML;
+        for (let i = 0; i < el.childNodes.length; i++) {
+          if (!el.childNodes[i].classList) continue
+          if (el.childNodes[i].classList.contains('bar')) {
+            share = el.childNodes[i].outerHTML;
             break;
           }
         }
@@ -173,7 +175,9 @@
                 timer: 2000
               })
           });
-      })
+    });
+
+    
      
     </script>
   </body>
