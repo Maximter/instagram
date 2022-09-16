@@ -21,7 +21,7 @@ export class Message extends BaseEntity {
   @JoinColumn()
   sender: User;
 
-  @Column()
+  @Column("text")
   content: string;
 
   @Column()

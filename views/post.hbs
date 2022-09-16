@@ -51,10 +51,10 @@
           </div>
       </div>
     </form>
+    <script src="./js/sweetalert2.all.min.js"></script>
     <script src="./js/upload-image.js"></script>
     <script src="./js/post-img-buttons.js"></script>
     {{#if err}}
-      <script src="./js/sweetalert2.all.min.js"></script>
       <script>
         document.getElementById('comment').value = '{{comment}}';
         uploaded_image_block.style.display = "none"
@@ -70,7 +70,6 @@
     {{/if}}
 
     {{#if success}}
-      <script src="./js/sweetalert2.all.min.js"></script>
       <script>
         uploaded_image_block.style.display = "none"
         uploaded_image.src = "#"

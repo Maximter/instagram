@@ -37,14 +37,14 @@
           <li>
             <a href="/post/{{this.[0]}}">
              {{#if this.[2]}}
-             <img src="/img/post/postedGif/{{this.[0]}}.gif" class="post-pic" title="{{this.comment}}">
+             <img src="/img/post/postedGif/{{this.[0]}}.gif" class="post-pic">
               {{else}}
                 {{#if this.[3]}}
                 <video class="post-pic" style="object-fit: cover;">
                   <source src="/img/post/postedVid/{{this.[0]}}.mp4" type='video/mp4;'>
                 </video>
                 {{else}}
-                 <img src="/img/post/smallPostedPic/{{this.[0]}}.jpg" class="post-pic" title="{{this.comment}}">
+                 <img src="/img/post/smallPostedPic/{{this.[0]}}.jpg" class="post-pic">
               {{/if}}
               {{/if}}
           </li>

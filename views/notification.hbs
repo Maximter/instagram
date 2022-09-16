@@ -37,7 +37,7 @@
                 {{#if this.gif}}
                 <p><a href="/user/{{this.user.username}}"><span>{{this.user.username}}</span></a> понравилась Ваша GIF:</p>
               <a href="/post/{{this.post.id_img}}">
-                <img src="/img/post/postedGif/{{this.post.id_img}}.gif" class="notif-post" title="{{this.post.comment}}">
+                <img src="/img/post/postedGif/{{this.post.id_img}}.gif" class="notif-post">
                 {{else}}
                   {{#if this.mp4}}
                     <p><a href="/user/{{this.user.username}}"><span>{{this.user.username}}</span></a> понравилась Ваше видео:</p>
@@ -48,7 +48,7 @@
                   {{else}}
                 <p><a href="/user/{{this.user.username}}"><span>{{this.user.username}}</span></a> понравилась Ваша фотография:</p>
               <a href="/post/{{this.post.id_img}}">
-                <img src="/img/post/smallPostedPic/{{this.post.id_img}}.jpg" class="notif-post" title="{{this.post.comment}}">
+                <img src="/img/post/smallPostedPic/{{this.post.id_img}}.jpg" class="notif-post">
                 {{/if}}
                 {{/if}}
 

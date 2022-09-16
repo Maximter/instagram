@@ -13,11 +13,8 @@ import { AppService } from 'src/app.service';
 import { PostService } from './post.service';
 
 const imageFilter = function(req, file, cb) {
-  // Accept images only
-  if (!file.originalname.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF|mp4)$/)) {
-      req.fileValidationError = 'Only image files are allowed!';      
+  if (!file.originalname.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF|mp4)$/))  
       return cb(null, false);
-  }
   cb(null, true);
 };
 
@@ -46,6 +43,7 @@ export class PostController {
   async renderPost(@Req() req: Request, @Res() res: Response) {
     const user = await this.appService.getUser(req);
     const postInfo = await this.postService.getPostInfo(req.params.id);
+    if (!postInfo) return res.render('404');
     const post = await this.appService.getLikes(user, [postInfo]);
 
     if (user) {

@@ -48,7 +48,7 @@ export class SocketService {
       where: { chat: id_chat },
     });
 
-    ai_chat.last_message_content = message;
+    ai_chat.last_message_content = `${message.slice(0, 30)}...`;
     ai_chat.last_message_sender = user;
     ai_chat.last_message_time = date;
     this.chatInfoRepository.save(ai_chat);

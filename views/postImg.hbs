@@ -30,14 +30,14 @@
         </a>
 
         {{#if post.gif}}
-        <img src="/img/post/postedGif/{{post.id_img}}.gif" class="post-pic" title="{{post.comment}}">
+        <img src="/img/post/postedGif/{{post.id_img}}.gif" class="post-pic">
         {{else}}
           {{#if post.mp4}}
           <video class="post-pic" controls="controls">
             <source src="/img/post/postedVid/{{post.id_img}}.mp4" type='video/mp4;'>
           </video>
           {{else}}
-          <img src="/img/post/postedPic/{{post.id_img}}.jpg" class="post-pic" title="{{post.comment}}">
+          <img src="/img/post/postedPic/{{post.id_img}}.jpg" class="post-pic">
         {{/if}}
         {{/if}}
       </div>
