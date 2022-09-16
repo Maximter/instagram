@@ -33,7 +33,15 @@ export class SocketService {
     const message = payload[0];
     const id_chat = payload[1];
     const date = `${Date.now()}`;
-
+    
+    let lastMessage = "";
+    if (message.includes('class="sticker_img im_gift"')) lastMessage = "Стикер"
+    else if (message.includes('src="/img/post/')) lastMessage = "Пост"
+    else {
+      if (message.length > 30) lastMessage = `${message.slice(0, 30)}...`
+      else lastMessage = message;
+    }
+    
     const token = await SocketService.getToken(client);
     const tokenEntity = await getConnection()
       .getRepository(Token)
@@ -48,7 +56,7 @@ export class SocketService {
       where: { chat: id_chat },
     });
 
-    ai_chat.last_message_content = `${message.slice(0, 30)}...`;
+    ai_chat.last_message_content = lastMessage;
     ai_chat.last_message_sender = user;
     ai_chat.last_message_time = date;
     this.chatInfoRepository.save(ai_chat);
