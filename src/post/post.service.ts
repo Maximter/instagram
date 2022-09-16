@@ -34,7 +34,8 @@ export class PostService {
     let path = `./public/img/post/postedPic/${id}.jpg`
     if (photo.mimetype == 'image/gif') path = `./public/img/post/postedGif/${id}.gif`
     else if (photo.mimetype == 'video/mp4') path = `./public/img/post/postedVid/${id}.mp4`
-    
+    else photo.mimetype = 'image/jpg'
+
     fs.rename(
       `./public/img/rowImg/${photo.filename}`, path,
       function (err) {
