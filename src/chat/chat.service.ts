@@ -28,7 +28,7 @@ export class ChatService {
         return interlocutor;
     }
 
-    async getMessages(user, interlocutor): Promise<object[]> {        
+    async getMessages(user, interlocutor, from=undefined): Promise<object[]> {        
         const userChats = [];
         const userEntityChats = await this.chatRepository.find({
         where: { member: user },
@@ -44,41 +44,71 @@ export class ChatService {
             .leftJoinAndSelect('chat.member', 'member')
             .where('chat.id_chat IN (:...id)', { id: userChats })
             .getMany();
-        
-        let id_chat;
-        for (let i = 0; i < membersTheChat.length; i++)
-            if (membersTheChat[i].member.id == interlocutor.id) {
-                id_chat =  membersTheChat[i].id_chat;
-                break;
-            } else if (i == membersTheChat.length - 1) return []
 
-        const messages = await getRepository(Message)
+        let id_chat, messages;
+        for (let i = 0; i < membersTheChat.length; i++) 
+          if (membersTheChat[i].member.id == interlocutor.id) {
+              id_chat =  membersTheChat[i].id_chat;
+              break;
+          } else if (i == membersTheChat.length - 1) return []
+            
+        if (!from) {  
+          messages = await getRepository(Message)
+              .createQueryBuilder('message')
+              .leftJoinAndSelect('message.sender', 'sender')
+              .where('message.chat = :id', { id: id_chat })
+              .orderBy('message.id', 'DESC')
+              .take(40)
+              .getMany();
+          messages = messages.reverse();
+        } else  
+          messages = await getRepository(Message)
             .createQueryBuilder('message')
             .leftJoinAndSelect('message.sender', 'sender')
             .where('message.chat = :id', { id: id_chat })
+            .andWhere('message.id < :lastMes', { lastMes : from })
+            .orderBy('message.id', 'DESC')
+            .take(40)
             .getMany();
 
         messages.forEach((el) => {
             if (el.sender.id == user.id) el['im-sender'] = true;  
-            el.sent_date = new Date(+el.sent_date).toLocaleTimeString().slice(0,-3);        
+            el.sent_date = new Date(+el.sent_date).toLocaleString()  
         })
 
         return messages
     }
 
-    async getMessagesById(id_chat, id_user): Promise<Message[]> {
-        const messages = await getRepository(Message)
-            .createQueryBuilder('message')
-            .leftJoinAndSelect('message.sender', 'sender')
-            .where('message.chat = :id', { id: id_chat })
-            .getMany();
-    
-        messages.forEach((element) => {
-          if (element.sender.id != id_user) delete element.sender;
-        });
-    
-        return messages;
+    async getMessagesById(id_chat, id_user, from=undefined): Promise<Message[]> {
+      let messages
+      
+      if (!from) {
+        messages = await getRepository(Message)
+          .createQueryBuilder('message')
+          .leftJoinAndSelect('message.sender', 'sender')
+          .where('message.chat = :id', { id: id_chat })
+          .orderBy('message.id', 'DESC')
+          .take(40)
+          .getMany();
+        messages = messages.reverse();
       }
+      else       
+        messages = await getRepository(Message)
+          .createQueryBuilder('message')
+          .leftJoinAndSelect('message.sender', 'sender')
+          .where('message.chat = :id', { id: id_chat })
+          .andWhere('message.id < :lastMes', { lastMes : from })
+          .orderBy('message.id', 'DESC')
+          .take(40)
+          .getMany();
+      
+     
+      messages.forEach((element) => {
+        if (element.sender.id != id_user) delete element.sender;
+      });
+  
+      return messages;
+    }
 
     async getChats(user): Promise<object[]> {
         const id_chats = [];

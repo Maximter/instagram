@@ -26,15 +26,15 @@
       <ul class="chats" id="outputChats">
         {{#each chats}}
           <li class="chat" id_chat="{{this.id_chat}}" username="{{this.interlocutor.username}}" id="chat" online="{{this.interlocutor.online}}" lastMessage="{{#if this.sender}}Вы: {{/if}}{{this.info.last_message_content}}">
-               <img src="./../img/smallAvatar/{{#if this.interlocutor.avatar}}{{this.interlocutor.id}}{{else}}standard{{/if}}.jpg" id_chat="{{this.id_chat}}" alt="{{this.interlocutor.name_lastname}}" title="{{this.interlocutor.name_lastname}}" class="chatAvatarImg">
-              <div class="onlinePoint" id="onlinePoint" id_chat="{{this.id_chat}}" style="display:none"></div>
-              <div>
-                  <p id="chatName" id_chat="{{this.id_chat}}" class="lastSenderText">{{this.interlocutor.name_lastname}}</p>
-                  <p id="lastMessage" id_chat="{{this.id_chat}}" class="lastMessageText">{{#if this.sender}}Вы: {{/if}}{{this.info.last_message_content}}</p>
+               <img online="{{this.interlocutor.online}}" src="./../img/smallAvatar/{{#if this.interlocutor.avatar}}{{this.interlocutor.id}}{{else}}standard{{/if}}.jpg" id_chat="{{this.id_chat}}" alt="{{this.interlocutor.name_lastname}}" title="{{this.interlocutor.name_lastname}}" class="chatAvatarImg">
+              <div online="{{this.interlocutor.online}}" class="onlinePoint" id="onlinePoint" id_chat="{{this.id_chat}}" style="display:none"></div>
+              <div online="{{this.interlocutor.online}}" id_chat="{{this.id_chat}}" class="inside">
+                  <p id="chatName" id_chat="{{this.id_chat}}" class="lastSenderText" online="{{this.interlocutor.online}}">{{this.interlocutor.name_lastname}}</p>
+                  <p id="lastMessage" id_chat="{{this.id_chat}}" class="lastMessageText" online="{{this.interlocutor.online}}">{{#if this.sender}}Вы: {{/if}}{{this.info.last_message_content}}</p>
               </div>
-              <div>
-                  <p id="time_last_message" class="time_last_message">{{this.info.last_message_time}}</p>
-                  <div id="read" class="{{#if this.unreadBool}}unread{{else}}{{#if interlocutorNotRead}}blueUnread{{/if}}{{/if}}">{{#if interlocutorNotRead}}{{else}}{{this.unread}}{{/if}}</div>
+              <div id_chat="{{this.id_chat}}" online="{{this.interlocutor.online}}">
+                  <p id="time_last_message" class="time_last_message" id_chat="{{this.id_chat}}" online="{{this.interlocutor.online}}">{{this.info.last_message_time}}</p>
+                  <div online="{{this.interlocutor.online}}" id_chat="{{this.id_chat}}" id="read" class="{{#if this.unreadBool}}unread{{else}}{{#if interlocutorNotRead}}blueUnread{{/if}}{{/if}}">{{#if interlocutorNotRead}}{{else}}{{this.unread}}{{/if}}</div>
               </div>                             
           </li>
         {{/each}}
@@ -59,8 +59,8 @@
           <div class="messageBox" id="messageBox">
               <ul class="outputmessages" id="outputMessages">
                 {{#each messages}}
-                  <li class="message {{#if im-sender}}own{{else}}interlocutor{{/if}}">
-                      <p>{{this.content}}</p>
+                  <li class="message {{#if im-sender}}own{{else}}interlocutor{{/if}}" id_message="{{this.id}}">
+                      <p>{{{this.content}}}</p>
                       <date style="font-size:12px; color: #000">{{this.sent_date}}</date>
                   </li>
                 {{/each}}

@@ -48,7 +48,6 @@
               <div class="under-post">
                 <img src="../img/system/{{#if this.like}}liked{{else}}notification-empty{{/if}}.svg" title="Нравится" class="like" onclick="like(this, '{{this.id_img}}')">
                 <img src="../img/system/copy.svg" title="Скопировать ссылку" class="copy" id="copy" onclick="copy('/post/{{this.id_img}}')">
-                <img src="../img/system/share-message.svg" title="Скопировать ссылку для отправки сообщения" class="share" id="share">
 
                 <p class="comment-text"><span style="font-weight: 500;" id="likes_{{this.id_img}}" likes="{{this.countLikes}}" >Отметок нравится: {{this.countLikes}}</span></p>
                 {{#if this.comment}}<p class="comment-text"><a href="user/{{this.user.username}}"><span style="font-weight: 500;">{{this.user.username}}:</span></a> {{this.comment}}</p>{{/if}}
@@ -70,7 +69,6 @@
               <div class="under-post">
                 <img src="../img/system/{{#if this.like}}liked{{else}}notification-empty{{/if}}.svg" title="Нравится" class="like" onclick="like(this, '{{this.id_img}}')">
                 <img src="../img/system/copy.svg" title="Скопировать ссылку" class="copy" id="copy" onclick="copy('/post/{{this.id_img}}')">
-                <img src="../img/system/share-message.svg" title="Скопировать ссылку для отправки сообщения" class="share">
 
                 <p class="comment-text"><span style="font-weight: 500;" id="likes_{{this.id_img}}" likes="{{this.countLikes}}" >Отметок нравится: {{this.countLikes}}</span></p>
                 <p class="comment-text"><span style="font-weight: 500;">{{this.user.username}}:</span> {{this.comment}}</p>
@@ -141,43 +139,7 @@
                 timer: 2000
               })
           });
-      }
-
-      {{!-- const share = document.getElementById('share'); --}}
-      {{!-- const share = document.querySelector('share'); --}}
-      $('.under-post').on('click','.share',function(el){
-
-        el = el.delegateTarget.parentElement
-        let share = ""
-        for (let i = 0; i < el.childNodes.length; i++) {
-          if (!el.childNodes[i].classList) continue
-          if (el.childNodes[i].classList.contains('bar')) {
-            share = el.childNodes[i].outerHTML;
-            break;
-          }
-        }
-        
-         navigator.clipboard.writeText(`${share}`) .then(() => {
-             Swal.fire({
-              position: 'top',
-              icon: 'success',
-              title: 'Ссылка на пост для отправки сообщения была скопирована',
-              showConfirmButton: false,
-              timer: 1000
-            })
-          })
-          .catch(err => {
-              Swal.fire({
-                position: 'top',
-                icon: 'error',
-                title: 'Упс, что-то пошло не по плану. Сообщите об этом нам',
-                showConfirmButton: false,
-                timer: 2000
-              })
-          });
-    });
-
-    
+      }  
      
     </script>
   </body>
