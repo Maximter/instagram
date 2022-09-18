@@ -27,6 +27,7 @@ export class NotificationService {
       .where('user_post.user = :id', { id: user.id })
       .getMany();
 
+    if (postsInfo.length == 0) return;
     const id_img = [];
     for (let i = 0; i < postsInfo.length; i++) {
       id_img.push(postsInfo[i].id_img);

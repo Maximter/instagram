@@ -63,15 +63,25 @@
                 <img src="../img/avatar/{{#if this.user.avatar}}{{this.user.id}}{{else}}standard{{/if}}.jpg" alt="{{this.user.name_lastname}}" title="{{this.user.name_lastname}}" class="owner-avatar">
                 <p class="owner-username">{{this.user.username}}</p>
               </a>
-              <a href="/post/{{this.id_img}}">
-                <img src="/img/post/postedPic/{{this.id_img}}.jpg" class="post-pic">
+              <a href="/post/{{this.id_img}}" class="bar">
+                {{#if this.gif}}
+                <img src="/img/post/postedGif/{{this.id_img}}.gif" class="post-pic">
+                {{else}}
+                  {{#if this.mp4}}
+                  <video class="post-pic" controls="controls">
+                    <source src="/img/post/postedVid/{{this.id_img}}.mp4" type='video/mp4;'>
+                  </video>
+                  {{else}}
+                <img src="/img/post/mediumPostedPic/{{this.id_img}}.jpg" class="post-pic">
+                {{/if}}
+                {{/if}}
               </a>
               <div class="under-post">
                 <img src="../img/system/{{#if this.like}}liked{{else}}notification-empty{{/if}}.svg" title="Нравится" class="like" onclick="like(this, '{{this.id_img}}')">
                 <img src="../img/system/copy.svg" title="Скопировать ссылку" class="copy" id="copy" onclick="copy('/post/{{this.id_img}}')">
 
                 <p class="comment-text"><span style="font-weight: 500;" id="likes_{{this.id_img}}" likes="{{this.countLikes}}" >Отметок нравится: {{this.countLikes}}</span></p>
-                <p class="comment-text"><span style="font-weight: 500;">{{this.user.username}}:</span> {{this.comment}}</p>
+                 {{#if this.comment}}<p class="comment-text"><span style="font-weight: 500;">{{this.user.username}}:</span> {{this.comment}}</p>{{/if}}
               </div>
             </li>
             {{/each}}

@@ -215,6 +215,7 @@ export class SocketService {
       .where('token.token = :token', { token: token })
       .getOne();      
 
+    if (!tokenEntity) return;
     const id_user = tokenEntity.user.id;
     this.userRepository.save({
       id: id_user,

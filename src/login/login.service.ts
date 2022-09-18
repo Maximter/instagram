@@ -19,20 +19,15 @@ export class LoginService {
   ) {}
 
   async validUser(req, body): Promise<object> {
-    const validEmail: RegExp = /^[\w-\.]+@[\w-]+\.[a-z]{2,4}$/i;
     const username = body.username.trim(),
       password = body.password;
-    let user;
-
-    if (validEmail.test(username)) {
-      user = await this.userRepository.findOne({
-        where: { email: username },
-      });
-    } else {
-      user = await this.userRepository.findOne({
-        where: { username: username },
-      });
-    }
+      
+    let user = await this.userRepository.findOne({
+      where: { email: username },
+    });
+    if (!user) user = await this.userRepository.findOne({
+      where: { username: username },
+    });
 
     if (user != undefined && (await bcrypt.compare(password, user.password))) {
       if (user.verificated) return { valid: true };
@@ -53,22 +48,16 @@ export class LoginService {
   }
 
   async getToken(body): Promise<string> {
-    const validEmail: RegExp = /^[\w-\.]+@[\w-]+\.[a-z]{2,4}$/i;
     const username = body.username.trim();
-    let user;
-
-    if (validEmail.test(username)) {
-      user = await this.userRepository.findOne({
-        where: { email: username },
-      });
-    } else {
-      user = await this.userRepository.findOne({
-        where: { username: username },
-      });
-    }
-
+    let user = await this.userRepository.findOne({
+      where: { email: username },
+    });
+    if (!user) user = await this.userRepository.findOne({
+      where: { username: username },
+    });
+    
     const tokenData = await this.tokenRepository.findOne({
-      where: { user: user },
+      where: { user: user.id },
     });
 
     return tokenData.token;

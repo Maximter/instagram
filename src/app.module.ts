@@ -31,6 +31,7 @@ import { AppGateway } from './gateway/app.gateway';
 import { Chat } from 'entity/chat.entity';
 import { ChatInfo } from 'entity/chat.info.entity';
 import { Message } from 'entity/message.entity';
+import { TokenModule } from './token/token.module';
 
 @Module({
   imports: [
@@ -60,6 +61,7 @@ import { Message } from 'entity/message.entity';
     NotificationModule,
     RecommendationModule,
     ChatModule,
+    TokenModule,
   ],
   controllers: [AppController],
   providers: [AppService, RecommendationService, SocketService, AppGateway],
