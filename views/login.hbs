@@ -17,6 +17,7 @@
         <input type="text" name="username" placeholder="Имя пользователя или эл. адрес" id="username" required>
         <input type="password" name="password" placeholder="Пароль" id="password" required>
         <button>Войти</button>
+        <a href="https://oauth.yandex.ru/authorize?response_type=code&client_id=a8fc1d2ca1434b31b9e36b8ef23d4f35" class="yandex-link"><img src="./img/system/yandex-button.svg" alt="Вход через Яндекс" class="yandex-button"></a>
       </form>
       <p class="havent-account">Нет аккаунта? <a href="/signup">Зарегистрироваться</a></p>
     </section>
@@ -27,7 +28,7 @@
   <script>
     window.onload = function() {
       const circle = document.querySelector('.circle');
-      const colors = ['#F9D423', '#FF4E50', '#BB377D', '#8CA6DB', '#00d2ff', '#FC354C', '#480048', '#FF8008', '#1FA2FF']
+      const colors = ['#F9D423', '#FF4E50', '#BB377D', '#8CA6DB', '#00d2ff', '#FC354C', '#480048', '#FF8008', '#1FA2FF', '#FC3F1D']
       let random_color = Math.floor(Math.random() * ((colors.length-1) + 1))
 
       circle.style.border = `3px solid ${colors[random_color]}`;
@@ -35,7 +36,7 @@
           selector: '.background',
           color: colors[random_color],
           connectParticles: 'true',
-          maxParticles: 100,
+          maxParticles: 150,
           speed: 0.4,
       });
     };

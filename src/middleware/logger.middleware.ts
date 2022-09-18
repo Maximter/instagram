@@ -12,7 +12,7 @@ export class LoggerMiddleware implements NestMiddleware {
   ) {}
 
   async use(req: Request, res: Response, next: NextFunction) {
-    if (req.route.path == '/post/:id') {
+    if (req.route.path == '/post/:id' || req.route.path == '/token') {
       next();
       return 0;
     }
