@@ -39,16 +39,16 @@ import { TokenModule } from './token/token.module';
     TypeOrmModule.forFeature([User, Token, User_post, Follow, LikePost, Chat, ChatInfo, Message]),
     MailerModule.forRoot({
       transport: {
-        host: 'smtp.yandex.com',
+        host: 'YANDEX_HOST',
         port: 465,
         secure: true,
         auth: {
-          user: 'm-a-x-o-k@yandex.ru',
-          pass: 'Vfrcbv7895123)))03',
+          user: 'YANDEX_EMAIL',
+          pass: 'YANDEX_PASSWORD',
         },
       },
       defaults: {
-        from: `Instyle <m-a-x-o-k@yandex.ru>`,
+        from: `Instyle <YANDEX_EMAIL>`,
       },
     }),
     LoginModule,
